@@ -13,3 +13,30 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin images/charset.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/charset.png
+
+#begin music/whatTheAbsoluteCrapDidIJustListenTo.wav
+/copy:music/whatTheAbsoluteCrapDidIJustListenTo.wav
+
+#begin shaders/solidShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/solidShader.fx
+
+#begin shaders/spriteDefault.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:shaders/spriteDefault.fx
+
