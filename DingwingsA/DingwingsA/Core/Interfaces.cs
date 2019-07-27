@@ -169,7 +169,12 @@ public abstract class Entity
         }
         if(c==4||c==5)
         {
-
+            Player p = this as Player;
+            if(p!=null&&!p.coins.Contains(new Coord(tilex,tiley)))
+            {
+                //get the coins
+                p.coins.Add(new Coord(tilex, tiley));
+            }
         }
 
         return c == 1;

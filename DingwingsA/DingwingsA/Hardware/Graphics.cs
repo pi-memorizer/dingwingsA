@@ -16,7 +16,7 @@ namespace Hardware
         internal static GraphicsDeviceManager graphics;
         internal static GraphicsDevice graphicsDevice;
         static VertexPositionColorTexture[] verts = new VertexPositionColorTexture[2000];
-        private const int _WIDTH = 320*2, _HEIGHT = 360;
+        public const int _WIDTH = 320*2, _HEIGHT = 360;
         public static int WIDTH = _WIDTH, HEIGHT = _HEIGHT;
         static bool lockedMaterial = false;
         static int currentVertex = 0;
@@ -29,7 +29,7 @@ namespace Hardware
         public static Texture2D bitmapFont;
         public static Dictionary<char, GameSprite> charSprites = new Dictionary<char, GameSprite>();
         public static float scale = 1;
-        public static int CHAR_SIZE = 8;
+        public const int CHAR_SIZE = 16;
 
         public static GameSprite[] tileset = new GameSprite[256 * 32];
         public static Texture2D slime32sheet;
@@ -133,7 +133,7 @@ namespace Hardware
             if (backbufferGUI == null || backbufferGUI.Width != currentWidth || backbufferGUI.Height != currentHeight)
             {
                 if (backbufferGUI != null) backbufferGUI.Dispose();
-                backbufferGUI = new RenderTarget2D(graphicsDevice, currentWidth, currentHeight, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
+                backbufferGUI = new RenderTarget2D(graphicsDevice, currentWidth, currentHeight, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
             graphicsDevice.SetRenderTarget(backbufferGUI);
             try
@@ -154,7 +154,7 @@ namespace Hardware
             graphicsDevice.Clear(color);
         }
 
-        public static void draw(GameSprite s, float x, float y, bool flipped = false)
+        public static void draw(GameSprite s, float x, float y, int width, int height, bool flipped = false)
         {
             Effect effect = spriteDefault;
             if (!lockedMaterial)
@@ -174,15 +174,15 @@ namespace Hardware
             x = Mathf.FloorToInt(x);
             y = Mathf.FloorToInt(y);
 
-            verts[currentVertex].Position = new Vector3(x, y + s.pixelHeight, 0);
+            verts[currentVertex].Position = new Vector3(x, y + height, 0);
             verts[currentVertex].TextureCoordinate = new Vector2(s.x+(flipped?s.width:0), s.y+s.height);
             verts[currentVertex + 1].Position = new Vector3(x, y, 0);
             verts[currentVertex + 1].TextureCoordinate = new Vector2(s.x + (flipped ? s.width : 0), s.y);
-            verts[currentVertex + 2].Position = new Vector3(x + s.pixelWidth, y, 0);
+            verts[currentVertex + 2].Position = new Vector3(x + width, y, 0);
             verts[currentVertex + 2].TextureCoordinate = new Vector2(s.x + (flipped ? 0 : s.width), s.y);
 
             verts[currentVertex + 3] = verts[currentVertex + 2];
-            verts[currentVertex + 4].Position = new Vector3(x + s.pixelWidth, y + s.pixelHeight, 0);
+            verts[currentVertex + 4].Position = new Vector3(x + width, y + height, 0);
             verts[currentVertex + 4].TextureCoordinate = new Vector2(s.x + (flipped ? 0 : s.width), s.y+s.height);
             verts[currentVertex + 5] = verts[currentVertex];
 
@@ -402,39 +402,22 @@ namespace Hardware
             }
         }
         
-        public static void drawCharacter(char c, float x, float y, int r, int g, int b)
+        public static void drawCharacter(char c, float x, float y)
         {
             if (c < 256)
             {
-                draw(charSprites[c], x, y);
+                draw(charSprites[c], x, y,CHAR_SIZE,CHAR_SIZE);
                 return;
             }
             //TODO non-ascii characters
         }
 
-        public static void drawCharacterHalf(char c, float x, float y, int r, int g, int b)
-        {
-            if (c < 256)
-            {
-                GameSprite s = charSprites[c];
-                s.pixelHeight /= 2;
-                s.pixelWidth /= 2;
-
-                draw(s, x, y);
-
-                s.pixelHeight *= 2;
-                s.pixelWidth *= 2;
-                return;
-            }
-            //TODO non-ascii characters
-        }
-
-        public static void drawString(string s, float x, float y, int r = 0, int g = 0, int b = 0)
+        public static void drawString(string s, float x, float y, int maxLength = 1000000)
         {
             int dx = 0;
 
             bool allAscii = true;
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i < s.Length&&i<maxLength; i++)
             {
                 if (s[i] >= 256)
                 {
@@ -445,41 +428,13 @@ namespace Hardware
 
             if (allAscii)
             {
-                lockTextMaterial(new Color(r, g, b));
+                //lockTextMaterial(new Color(r, g, b));
+                lockTextMaterial(Color.Black);
                 dx = 0;
                 for (int i = 0; i < s.Length; i++)
                 {
-                    drawCharacter(s[i], x + dx, y, r, g, b);
+                    drawCharacter(s[i], x + dx, y);
                     dx += CHAR_SIZE;
-                }
-                unlockMaterial();
-                return;
-            }
-            //TODO non-ascii characters
-        }
-
-        public static void drawStringHalf(string s, float x, float y, int r = 0, int g = 0, int b = 0)
-        {
-            int dx = 0;
-
-            bool allAscii = true;
-            for (int i = 0; i < s.Length; i++)
-            {
-                if (s[i] >= 256)
-                {
-                    allAscii = false;
-                    break;
-                }
-            }
-
-            if (allAscii)
-            {
-                lockTextMaterial(new Color(r, g, b));
-                dx = 0;
-                for (int i = 0; i < s.Length; i++)
-                {
-                    drawCharacterHalf(s[i], x + dx, y, r, g, b);
-                    dx += CHAR_SIZE / 2;
                 }
                 unlockMaterial();
                 return;
@@ -507,7 +462,7 @@ namespace Hardware
                 for (int i = s.Length - 1; i >= 0; i--)
                 {
                     dx -= CHAR_SIZE;
-                    drawCharacter(s[i], x + dx, y, r, g, b);
+                    drawCharacter(s[i], x + dx, y);
                 }
                 unlockMaterial();
                 return;

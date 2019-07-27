@@ -18,19 +18,25 @@ public class Player : Entity
     public bool test = false;
     public bool test2 = false;
     public int world = 0;
+    public HashSet<Coord> coins = new HashSet<Coord>();
     public Player()
     {
         x = 0;
         y = 380;
         width = 32;
-        height = 32;
-
+        height = 31;
     }
 
     public override void draw()
     {
         //Graphics.drawRect(Color.White, Core.getOnscreenX(x), Core.getOnscreenY(y), width, height);
-        Graphics.draw(Graphics.slime32[(((int)HardwareInterface.timeSinceLevelLoad)%2)*4], Core.getOnscreenX(x), Core.getOnscreenY(y),flipped);
+        int index = 0;
+        if(grounded&&Mathf.FloorToInt(x/32)%2==0)
+        {
+            //index += (((int)HardwareInterface.timeSinceLevelLoad) % 2) * 4;
+            index += 4;
+        }
+        Graphics.draw(Graphics.slime32[index], Core.getOnscreenX(x), Core.getOnscreenY(y-1),32,32,flipped);
     }
 
     public override void run()
