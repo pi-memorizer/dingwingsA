@@ -29,8 +29,8 @@ public partial class Core {
     {
         instance = this;
 
-        worlds.Add(new TiledWorld("test", testWorldInit));
-        //p.world = 0;
+        worlds.Add(new TiledWorld("right", testWorldInit));
+        p.world = 0;
 
         stateStack.Add(new WorldState());
         //stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));

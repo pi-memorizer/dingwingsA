@@ -23,7 +23,7 @@ public class Player : Entity
     {
         x = 0;
         width = 28;
-        y = 380;
+        y = 0;
         height = 31;
     }
 
