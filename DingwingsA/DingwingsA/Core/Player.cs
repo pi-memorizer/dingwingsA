@@ -29,7 +29,8 @@ public class Player : Entity
 
     public override void draw()
     {
-        Graphics.drawRect(Color.White, Core.getOnscreenX(x), Core.getOnscreenY(y), width, height);
+        //Graphics.drawRect(Color.White, Core.getOnscreenX(x), Core.getOnscreenY(y), width, height);
+        Graphics.draw(Graphics.slime32[(((int)HardwareInterface.timeSinceLevelLoad)%2)*4], Core.getOnscreenX(x), Core.getOnscreenY(y),flipped);
     }
 
     public override void run()

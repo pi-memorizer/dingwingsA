@@ -22,7 +22,6 @@ namespace Hardware
         static int currentVertex = 0;
         static Matrix cameraMatrix;
         static RenderTarget2D backbufferGUI;
-        static int _width, _height;
 
         public static float xOffset = 0, yOffset = 0;
         public static Effect solidColor, spriteDefault;
@@ -33,6 +32,8 @@ namespace Hardware
         public static int CHAR_SIZE = 8;
 
         public static GameSprite[] tileset = new GameSprite[256 * 32];
+        public static Texture2D slime32sheet;
+        public static GameSprite[] slime32;
 
         public static void init()
         {
@@ -48,6 +49,12 @@ namespace Hardware
             for (int i = 1; i <= 1; i++)
             {
                 tilesets.Add(content.Load<Texture2D>("images/tileset" + i));
+            }
+            slime32sheet = content.Load<Texture2D>("images/slime-sheet");
+            slime32 = new GameSprite[8];
+            for(int i = 0; i < 8; i++)
+            {
+                slime32[i] = new GameSprite(slime32sheet, 32 * (i % 4), 32 * (i / 4), 32, 32);
             }
 
             //shaders
@@ -147,14 +154,14 @@ namespace Hardware
             graphicsDevice.Clear(color);
         }
 
-        public static void draw(GameSprite s, float x, float y, int r = 255, int g = 255, int b = 255)
+        public static void draw(GameSprite s, float x, float y, bool flipped = false)
         {
             Effect effect = spriteDefault;
             if (!lockedMaterial)
             {
                 effect.Parameters["s0"].SetValue(s.texture);
                 effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
-                effect.Parameters["Color"].SetValue(new Color(r,g,b).ToVector4());
+                effect.Parameters["Color"].SetValue(Color.White.ToVector4());
                 graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 effect.CurrentTechnique.Passes[0].Apply();
             }
@@ -168,15 +175,15 @@ namespace Hardware
             y = Mathf.FloorToInt(y);
 
             verts[currentVertex].Position = new Vector3(x, y + s.pixelHeight, 0);
-            verts[currentVertex].TextureCoordinate = new Vector2(s.x, s.y+s.height);
+            verts[currentVertex].TextureCoordinate = new Vector2(s.x+(flipped?s.width:0), s.y+s.height);
             verts[currentVertex + 1].Position = new Vector3(x, y, 0);
-            verts[currentVertex + 1].TextureCoordinate = new Vector2(s.x, s.y);
+            verts[currentVertex + 1].TextureCoordinate = new Vector2(s.x + (flipped ? s.width : 0), s.y);
             verts[currentVertex + 2].Position = new Vector3(x + s.pixelWidth, y, 0);
-            verts[currentVertex + 2].TextureCoordinate = new Vector2(s.x+s.width, s.y);
+            verts[currentVertex + 2].TextureCoordinate = new Vector2(s.x + (flipped ? 0 : s.width), s.y);
 
             verts[currentVertex + 3] = verts[currentVertex + 2];
             verts[currentVertex + 4].Position = new Vector3(x + s.pixelWidth, y + s.pixelHeight, 0);
-            verts[currentVertex + 4].TextureCoordinate = new Vector2(s.x+s.width, s.y+s.height);
+            verts[currentVertex + 4].TextureCoordinate = new Vector2(s.x + (flipped ? 0 : s.width), s.y+s.height);
             verts[currentVertex + 5] = verts[currentVertex];
 
             if (!lockedMaterial)
@@ -399,7 +406,7 @@ namespace Hardware
         {
             if (c < 256)
             {
-                draw(charSprites[c], x, y, r, g, b);
+                draw(charSprites[c], x, y);
                 return;
             }
             //TODO non-ascii characters
@@ -413,7 +420,7 @@ namespace Hardware
                 s.pixelHeight /= 2;
                 s.pixelWidth /= 2;
 
-                draw(s, x, y, r, g, b);
+                draw(s, x, y);
 
                 s.pixelHeight *= 2;
                 s.pixelWidth *= 2;

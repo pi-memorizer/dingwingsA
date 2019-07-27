@@ -29,10 +29,12 @@ class WorldState : GameState
         if (Input.getRight())
         {
             p.vx = PLAYER_MOVE_SPEED;
+            p.flipped = false;
         }
         else if (Input.getLeft())
         {
             p.vx = -PLAYER_MOVE_SPEED;
+            p.flipped = true;
         }
         else p.vx = 0;
         p.simulate(w);

@@ -138,6 +138,7 @@ public abstract class Entity
     public string id = "";
     public int size = 1;
     public float dashing = 0, vdash;
+    public bool flipped = false;
 
     public virtual bool collides(Entity e)
     {
@@ -166,22 +167,33 @@ public abstract class Entity
             dashing = 1;
             vdash = Mathf.Sign(vx) * 3 * WorldState.PLAYER_MOVE_SPEED;
         }
+        if(c==4||c==5)
+        {
+
+        }
 
         return c == 1;
     }
 
     public void simulate(World w)
     {
+        if (vy > WorldState.PLAYER_JUMP_SPEED * .2F) grounded = false;
         float __vx = vx;
-        if (dashing > 0) __vx = vdash;
-        float mag = Mathf.CeilToInt(Mathf.Sqrt(__vx * __vx + vy * vy));
+        float __vy = vy;
+        if (dashing > 0)
+        {
+            __vx = vdash;
+            __vy = 0;
+            vy = 0;
+            grounded = false;
+        }
+        float mag = Mathf.CeilToInt(Mathf.Sqrt(__vx * __vx + __vy * __vy));
         float _vx = __vx / mag * HardwareInterface.deltaTime;
-        float _vy = vy / mag * HardwareInterface.deltaTime;
+        float _vy = __vy / mag * HardwareInterface.deltaTime;
         if (dashing > 0)
         {
             dashing -= HardwareInterface.deltaTime;
         }
-        if (vy > WorldState.PLAYER_JUMP_SPEED*.2F) grounded = false;
         
         bool jump = false;
         for (int i = 0; i < mag; i++)
