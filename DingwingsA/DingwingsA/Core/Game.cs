@@ -19,7 +19,11 @@ public partial class Core {
     private float touchTime = 0;
     public int frames = 0;
     public const int COLLIDES_X = 1, COLLIDES_Y = 2, COLLIDES_BOTH = 3;
-    private Dictionary<string, bool> flags = new Dictionary<string, bool>();
+    private static Dictionary<string, bool> flags = new Dictionary<string, bool>();
+    public static Dictionary<Coord, GraphicalException> exceptions = new Dictionary<Coord,GraphicalException>();
+    public static float deadTime = 0;
+    public static int money = 0;
+    public static float animationMoney = 0;
 
     public Core()
     {
@@ -29,7 +33,7 @@ public partial class Core {
         //p.world = 0;
 
         stateStack.Add(new WorldState());
-        stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
+        //stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
     }
 
     public void testWorldInit(World w)
@@ -37,7 +41,27 @@ public partial class Core {
 
     }
 
-    public bool getFlag(string s)
+    public class GraphicalException
+    {
+        public float time;
+        public int newTile;
+       
+        public GraphicalException(int newTile, float time)
+        {
+            this.newTile = newTile;
+            this.time = time;
+        }
+    }
+
+    public static void addException(Coord c, int newTile, float time)
+    {
+        if(!exceptions.ContainsKey(c))
+        {
+            exceptions.Add(c, new GraphicalException(newTile, time));
+        }
+    }
+
+    public static bool getFlag(string s)
     {
         if(flags.ContainsKey(s))
         {
@@ -46,7 +70,7 @@ public partial class Core {
         return false;
     }
 
-    public void setFlag(string s, bool b = true)
+    public static void setFlag(string s, bool b = true)
     {
         if(flags.ContainsKey(s))
         {
@@ -109,8 +133,34 @@ public partial class Core {
         Graphics.draw(s, x, y,s.pixelWidth,s.pixelHeight);
     }
 
+    Stack<Coord> toRemove = new Stack<Coord>();
     public void run()
     {
+        if(money<animationMoney)
+        {
+            animationMoney -= HardwareInterface.deltaTime*100;
+            if (money > animationMoney) animationMoney = money;
+        }
+        if(money>animationMoney)
+        {
+            animationMoney += HardwareInterface.deltaTime*100;
+            if (money < animationMoney) animationMoney = money;
+        }
+
+        foreach(var coord in exceptions.Keys)
+        {
+            GraphicalException g = exceptions[coord];
+            g.time -= HardwareInterface.deltaTime;
+            if(g.time<=0)
+            {
+                toRemove.Push(coord);
+            }
+        }
+        while(toRemove.Count>0)
+        {
+            exceptions.Remove(toRemove.Pop());
+        }
+
         frames++;
         if (stateStack.Count > 0)
         {

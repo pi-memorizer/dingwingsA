@@ -165,6 +165,7 @@ public abstract class Entity
         if(c==2&&grounded)
         {
             jump = true;
+            Core.addException(new Coord(tilex, tiley), 4, 1);
         }
         if(c==3&&grounded&&vx!=0)
         {
@@ -270,10 +271,11 @@ public abstract class Entity
             grounded = false;
             vy -= WorldState.PLAYER_JUMP_SPEED;
         }
-        if(dead&&this is Player)
+        if(dead&&this is Player&&Core.deadTime<=0)
         {
-            x = 0;
-            y = 0;
+            Core.money -= 100;
+            Core.deadTime = 1.5F;
+            (this as Player).unlockCamera(x, y);
         }
     }
 }
