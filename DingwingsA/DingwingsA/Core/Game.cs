@@ -33,6 +33,7 @@ public partial class Core {
         //p.world = 0;
 
         stateStack.Add(new WorldState());
+        //stateStack.Add(new ShopState());
         //stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
     }
 
@@ -80,6 +81,20 @@ public partial class Core {
         {
             flags.Add(s, b);
         }
+    }
+
+    public static int getGraphicsLevel()
+    {
+        if (getFlag("graphics2")) return 2;
+        if (getFlag("graphics1")) return 1;
+        return 0;
+    }
+
+    public static int getMusicLevel()
+    {
+        if (getFlag("music2")) return 2;
+        if (getFlag("music1")) return 1;
+        return 0;
     }
 
     public static bool frustrumCull(unit x, unit y)

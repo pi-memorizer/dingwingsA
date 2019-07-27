@@ -162,10 +162,10 @@ public abstract class Entity
         {
             return Core.rectCollides(tilex * Core.TILE_SIZE, tiley * Core.TILE_SIZE, Core.TILE_SIZE, Core.TILE_SIZE, x, y, width, height);
         }
-        if(c==2&&grounded)
+        if (c == 2 && grounded)
         {
             jump = true;
-            Core.addException(new Coord(tilex, tiley), 4, 1);
+            Core.addException(new Coord(tilex, tiley), 52, .25F);
         }
         if(c==3&&grounded&&vx!=0)
         {
@@ -189,6 +189,12 @@ public abstract class Entity
         if(c==7)
         {
             dead = true;
+        }
+        if(c==8)
+        {
+            dead = true;
+            Core.addException(new Coord(tilex, tiley), -16, 60F);
+            alive = false;
         }
 
         return false;

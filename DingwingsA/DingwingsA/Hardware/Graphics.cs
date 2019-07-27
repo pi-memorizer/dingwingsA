@@ -16,7 +16,7 @@ namespace Hardware
         internal static GraphicsDeviceManager graphics;
         internal static GraphicsDevice graphicsDevice;
         static VertexPositionColorTexture[] verts = new VertexPositionColorTexture[2000];
-        public const int _WIDTH = 320*2, _HEIGHT = 360;
+        public const int _WIDTH = 640, _HEIGHT = 360;
         public static int WIDTH = _WIDTH, HEIGHT = _HEIGHT;
         static bool lockedMaterial = false;
         static int currentVertex = 0;
@@ -30,11 +30,11 @@ namespace Hardware
         public static Dictionary<char, GameSprite> charSprites = new Dictionary<char, GameSprite>();
         public static float scale = 1;
         public const int CHAR_SIZE = 16;
-        public static Color filter;
 
         public static GameSprite[] tileset = new GameSprite[256 * 32];
-        public static Texture2D slime32sheet;
+        public static Texture2D[] slime32sheet;
         public static GameSprite[] slime32;
+        public static Texture2D[] backgrounds = new Texture2D[3];
 
         public static void init()
         {
@@ -49,13 +49,22 @@ namespace Hardware
             tilesets = new List<Texture2D>();
             for (int i = 1; i <= 1; i++)
             {
+                tilesets.Add(content.Load<Texture2D>("images/tileset" + i+"-tiny"));
+                tilesets.Add(content.Load<Texture2D>("images/tileset" + i+"-small"));
                 tilesets.Add(content.Load<Texture2D>("images/tileset" + i));
             }
-            slime32sheet = content.Load<Texture2D>("images/slime-sheet");
-            slime32 = new GameSprite[8];
-            for(int i = 0; i < 8; i++)
+            slime32sheet = new Texture2D[3];
+            slime32sheet[0] = content.Load<Texture2D>("images/slime-sheet-tiny");
+            slime32sheet[1] = content.Load<Texture2D>("images/slime-sheet-small");
+            slime32sheet[2] = content.Load<Texture2D>("images/slime-sheet");
+            slime32 = new GameSprite[24];
+            for(int i = 0; i < 24; i++)
             {
-                slime32[i] = new GameSprite(slime32sheet, 32 * (i % 4), 32 * (i / 4), 32, 32);
+                slime32[i] = new GameSprite(slime32sheet[i/8], 32 * (i % 4), 32 * ((i%8) / 4), 32, 32);
+            }
+            for(int i = 0; i < 3; i++)
+            {
+                backgrounds[i] = content.Load<Texture2D>("images/background" + (i + 1));
             }
 
             //shaders
@@ -372,7 +381,51 @@ namespace Hardware
                 currentVertex += 6;
             }
         }
-        
+
+        public static void drawParallax(Texture t, float x, float amount)
+        {
+            Effect effect = spriteDefault;
+            if (!lockedMaterial)
+            {
+                effect.Parameters["s0"].SetValue(t);
+                effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
+                effect.Parameters["Color"].SetValue(Color.White.ToVector4());
+                graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+                effect.CurrentTechnique.Passes[0].Apply();
+            }
+            else if (currentVertex + 6 >= verts.Length)
+            {
+                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
+                currentVertex = 0;
+            }
+
+            float left = x * amount;
+            float right = left + (float)WIDTH / _WIDTH / 2;
+            
+            float l = 2 * HEIGHT - 1;
+            verts[currentVertex].Position = new Vector3(0, HEIGHT, l);
+            verts[currentVertex].TextureCoordinate = new Vector2(left, 1);
+            verts[currentVertex + 1].Position = new Vector3(0, 0, l);
+            verts[currentVertex + 1].TextureCoordinate = new Vector2(left, 0);
+            verts[currentVertex + 2].Position = new Vector3(WIDTH, 0, l);
+            verts[currentVertex + 2].TextureCoordinate = new Vector2(right, 0);
+
+            verts[currentVertex + 3] = verts[currentVertex + 2];
+            verts[currentVertex + 4].Position = new Vector3(WIDTH, HEIGHT, l);
+            verts[currentVertex + 4].TextureCoordinate = new Vector2(right, 1);
+            verts[currentVertex + 5] = verts[currentVertex];
+
+            if (!lockedMaterial)
+            {
+                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
+                currentVertex = 0;
+            }
+            else
+            {
+                currentVertex += 6;
+            }
+        }
+
         public static void drawRect(Color c, float x, float y, int width, int height)
         {
             Effect effect = solidColor;

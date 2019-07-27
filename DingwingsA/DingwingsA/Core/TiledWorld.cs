@@ -230,15 +230,19 @@ public class TiledWorld : World
                 {
                     var list = pair.Value;
                     
-                    Graphics.lockMaterial(Graphics.tilesets[pair.Key]);
+                    Graphics.lockMaterial(Graphics.tilesets[pair.Key*3+Core.getGraphicsLevel()]);
                     for (int i = 0; i < list.Count; i++)
                     {
                         Chunk.Tile tile = list[i];
                         int id = tile.id;
-                        Coord coord = new Coord(tile.x + x * CHUNK_SIZE, tile.y + y * CHUNK_SIZE);
-                        if(Core.exceptions.ContainsKey(coord))
+                        if(Core.exceptions.Count>0)
                         {
-                            //id = Core.exceptions[coord].newTile;
+                            Coord coord = new Coord(tile.x + x * CHUNK_SIZE, tile.y + y * CHUNK_SIZE);
+                            if (Core.exceptions.ContainsKey(coord))
+                            {
+                                id = Core.exceptions[coord].newTile;
+                                if (id < 0) id = tile.id + id;
+                            }
                         }
                         Graphics.draw(Graphics.tileset[pair.Key * 256 + id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null);
                     }

@@ -18,7 +18,7 @@ namespace Hardware
 #if WINDOWS
     class Sound
     {
-        public static string baseSong = "Content/music/whatTheAbsoluteCrapDidIJustListenTo.wav";
+        public static string baseSong = "Content/music/Bongo";
 
         static WaveOutEvent songInstance = new WaveOutEvent();
         static string currentTheme = "";
@@ -28,9 +28,10 @@ namespace Hardware
 
         public static void init()
         {
-            loopStream = new LoopStream(new AudioFileReader(baseSong));
+            loopStream = new LoopStream(new AudioFileReader(baseSong+"0.wav"));
             songInstance.Init(loopStream);
             songInstance.Stop();
+            setMusic(baseSong);
         }
         public static void update()
         {
@@ -52,6 +53,7 @@ namespace Hardware
 
         public static void setMusic(string song, SoundEffect intro)
         {
+            song += Core.getMusicLevel() + ".wav";
             if (changedThisFrame) return;
             if (currentTheme == song) {
                 if(songInstance.PlaybackState!=PlaybackState.Playing)
@@ -70,6 +72,7 @@ namespace Hardware
 
         public static void setMusic(string song)
         {
+            song += Core.getMusicLevel()+".wav";
             if (changedThisFrame) return;
             if (currentTheme == song)
             {
