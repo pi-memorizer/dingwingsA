@@ -37,7 +37,7 @@ class Textbox : GameState
 
     public override void draw()
     {
-        int maxChars = Mathf.FloorToInt(time);
+        int maxChars = Mathf.FloorToInt(time*30);
         Graphics.drawRect(Color.White, Graphics.WIDTH / 2 - WIDTH / 2, Graphics.HEIGHT - HEIGHT, WIDTH, HEIGHT);
         for(int i = 0; i < lines.Count; i++)
         {

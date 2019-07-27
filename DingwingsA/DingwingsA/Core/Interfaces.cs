@@ -154,10 +154,14 @@ public abstract class Entity
         return collision == 0;
     }
 
-    public bool collidesTile(World w, int tilex, int tiley, ref bool jump)
+    public bool collidesTile(World w, int tilex, int tiley, ref bool jump, ref bool dead)
     {
         int c = w.getCollision(tilex, tiley);
 
+        if(c==1)
+        {
+            return Core.rectCollides(tilex * Core.TILE_SIZE, tiley * Core.TILE_SIZE, Core.TILE_SIZE, Core.TILE_SIZE, x, y, width, height);
+        }
         if(c==2&&grounded)
         {
             jump = true;
@@ -176,8 +180,17 @@ public abstract class Entity
                 p.coins.Add(new Coord(tilex, tiley));
             }
         }
+        if(c==6)
+        {
+            //thin platform
+            return Core.rectCollides(tilex * Core.TILE_SIZE, tiley * Core.TILE_SIZE, Core.TILE_SIZE, 4, x, y, width, height);
+        }
+        if(c==7)
+        {
+            dead = true;
+        }
 
-        return c == 1;
+        return false;
     }
 
     public void simulate(World w)
@@ -200,7 +213,7 @@ public abstract class Entity
             dashing -= HardwareInterface.deltaTime;
         }
         
-        bool jump = false;
+        bool jump = false, dead = false;
         for (int i = 0; i < mag; i++)
         {
             //apply subvelocity
@@ -216,7 +229,7 @@ public abstract class Entity
             {
                 for (int _y = Core.safeDiv(y, Core.TILE_SIZE); _y <= Core.safeDiv(y + height, Core.TILE_SIZE); _y++)
                 {
-                    collision = collision || collidesTile(w, _x, _y, ref jump);
+                    collision = collision || collidesTile(w, _x, _y, ref jump, ref dead);
                 }
             }
             //if collided, undo that subvelocity and cancel velocity
@@ -238,7 +251,7 @@ public abstract class Entity
             {
                 for (int _y = Core.safeDiv(y, Core.TILE_SIZE); _y <= Core.safeDiv(y + height, Core.TILE_SIZE); _y++)
                 {
-                    collision = collision || collidesTile(w, _x, _y, ref jump);
+                    collision = collision || collidesTile(w, _x, _y, ref jump, ref dead);
                 }
             }
             if (collision)
@@ -256,6 +269,11 @@ public abstract class Entity
         {
             grounded = false;
             vy -= WorldState.PLAYER_JUMP_SPEED;
+        }
+        if(dead&&this is Player)
+        {
+            x = 0;
+            y = 0;
         }
     }
 }

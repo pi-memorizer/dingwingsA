@@ -417,7 +417,7 @@ namespace Hardware
             int dx = 0;
 
             bool allAscii = true;
-            for (int i = 0; i < s.Length&&i<maxLength; i++)
+            for (int i = 0; i < s.Length; i++)
             {
                 if (s[i] >= 256)
                 {
@@ -431,7 +431,7 @@ namespace Hardware
                 //lockTextMaterial(new Color(r, g, b));
                 lockTextMaterial(Color.Black);
                 dx = 0;
-                for (int i = 0; i < s.Length; i++)
+                for (int i = 0; i < s.Length && i < maxLength; i++)
                 {
                     drawCharacter(s[i], x + dx, y);
                     dx += CHAR_SIZE;

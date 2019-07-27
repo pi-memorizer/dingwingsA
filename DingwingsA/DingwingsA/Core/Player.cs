@@ -22,8 +22,8 @@ public class Player : Entity
     public Player()
     {
         x = 0;
+        width = 28;
         y = 380;
-        width = 32;
         height = 31;
     }
 
@@ -36,7 +36,7 @@ public class Player : Entity
             //index += (((int)HardwareInterface.timeSinceLevelLoad) % 2) * 4;
             index += 4;
         }
-        Graphics.draw(Graphics.slime32[index], Core.getOnscreenX(x), Core.getOnscreenY(y-1),32,32,flipped);
+        Graphics.draw(Graphics.slime32[index], Core.getOnscreenX(x-2), Core.getOnscreenY(y-1),32,32,flipped);
     }
 
     public override void run()
