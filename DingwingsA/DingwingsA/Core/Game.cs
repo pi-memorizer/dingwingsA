@@ -33,7 +33,7 @@ public partial class Core {
         //p.world = 0;
 
         stateStack.Add(new WorldState());
-        //stateStack.Add(new ShopState());
+        stateStack.Add(new ShopState());
         //stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
     }
 

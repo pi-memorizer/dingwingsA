@@ -190,7 +190,25 @@ public abstract class Entity
         {
             dead = true;
         }
-        if(c==8)
+        if(c==8&&Core.rectCollides(x,y,width,height,tilex*Core.TILE_SIZE+1,tiley*Core.TILE_SIZE+16,Core.TILE_SIZE-2,16))
+        {
+            dead = true;
+            Core.addException(new Coord(tilex, tiley), -16, 60F);
+            alive = false;
+        }
+        if (c == 9 && Core.rectCollides(x, y, width, height, tilex * Core.TILE_SIZE, tiley * Core.TILE_SIZE+1, 16, Core.TILE_SIZE-2))
+        {
+            dead = true;
+            Core.addException(new Coord(tilex, tiley), -16, 60F);
+            alive = false;
+        }
+        if (c == 10 && Core.rectCollides(x, y, width, height, tilex * Core.TILE_SIZE+16, tiley * Core.TILE_SIZE+1, 16, Core.TILE_SIZE-2))
+        {
+            dead = true;
+            Core.addException(new Coord(tilex, tiley), -16, 60F);
+            alive = false;
+        }
+        if (c == 11 && Core.rectCollides(x, y, width, height, tilex * Core.TILE_SIZE+1, tiley * Core.TILE_SIZE, Core.TILE_SIZE-2, 16))
         {
             dead = true;
             Core.addException(new Coord(tilex, tiley), -16, 60F);

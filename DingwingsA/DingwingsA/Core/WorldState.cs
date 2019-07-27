@@ -78,6 +78,10 @@ class WorldState : GameState
                 p.flipped = true;
             }
             else p.vx = 0;
+            if(getStart()&&!start)
+            {
+                Core.instance.stateStack.Add(new ShopState());
+            }
         } else
         {
             Core.deadTime -= HardwareInterface.deltaTime;
