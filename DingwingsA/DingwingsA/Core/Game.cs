@@ -24,8 +24,8 @@ public partial class Core {
     {
         instance = this;
 
-        worlds.Add(new TiledWorld("test", testWorldInit));
-
+        worlds.Add(new TiledWorld("right", testWorldInit));
+        p.world = 0;
         
 
 

@@ -21,7 +21,7 @@ public class Player : Entity
     public Player()
     {
         x = 0;
-        y = 0;
+        y = 380;
         width = 32;
         height = 32;
 
