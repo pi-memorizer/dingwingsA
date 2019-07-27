@@ -238,7 +238,7 @@ public class TiledWorld : World
                         Coord coord = new Coord(tile.x + x * CHUNK_SIZE, tile.y + y * CHUNK_SIZE);
                         if(Core.exceptions.ContainsKey(coord))
                         {
-                            id = Core.exceptions[coord].newTile;
+                            //id = Core.exceptions[coord].newTile;
                         }
                         Graphics.draw(Graphics.tileset[pair.Key * 256 + id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null);
                     }
