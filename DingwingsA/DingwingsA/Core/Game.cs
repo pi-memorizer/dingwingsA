@@ -19,6 +19,7 @@ public partial class Core {
     private float touchTime = 0;
     public int frames = 0;
     public const int COLLIDES_X = 1, COLLIDES_Y = 2, COLLIDES_BOTH = 3;
+    private Dictionary<string, bool> flags = new Dictionary<string, bool>();
 
     public Core()
     {
@@ -30,11 +31,33 @@ public partial class Core {
 
 
         stateStack.Push(new WorldState());
+        stateStack.Push(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
     }
 
     public void testWorldInit(World w)
     {
 
+    }
+
+    public bool getFlag(string s)
+    {
+        if(flags.ContainsKey(s))
+        {
+            return flags[s];
+        }
+        return false;
+    }
+
+    public void setFlag(string s, bool b = true)
+    {
+        if(flags.ContainsKey(s))
+        {
+            flags[s] = b;
+        }
+        else
+        {
+            flags.Add(s, b);
+        }
     }
 
     public static bool frustrumCull(unit x, unit y)
@@ -85,7 +108,7 @@ public partial class Core {
 
     public static void draw(GameSprite s, int x, int y, int layer = 0)
     {
-        Graphics.draw(s, x, y);
+        Graphics.draw(s, x, y,s.pixelWidth,s.pixelHeight);
     }
 
     public void run()

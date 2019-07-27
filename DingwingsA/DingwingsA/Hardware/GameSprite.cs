@@ -34,7 +34,7 @@ namespace Hardware
 
         public void draw(int x, int y, int layer = 0)
         {
-            Graphics.draw(this, x + xOffset, y + yOffset);
+            Graphics.draw(this, x + xOffset, y + yOffset,pixelWidth,pixelHeight);
         }
     }
 }
