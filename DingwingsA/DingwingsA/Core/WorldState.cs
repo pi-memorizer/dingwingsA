@@ -23,7 +23,7 @@ class WorldState : GameState
         }
         if(p.grounded&&Input.getB()&&!b&&p.vx!=0&&p.dashing<=0)
         {
-            p.dashing = 1;
+            p.dashing = .5F;
             p.vdash = Mathf.Sign(p.vx) * 3 * PLAYER_MOVE_SPEED;
         }
         if (Input.getRight())
@@ -47,7 +47,9 @@ class WorldState : GameState
     public override void draw()
     {
         Graphics.clear(Color.Green);
+        Graphics.setFilter(false);
         p.draw();
         Core.instance.worlds[p.world].draw();
+        Graphics.setFilter(false);
     }
 }

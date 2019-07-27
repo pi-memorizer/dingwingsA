@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 public partial class Core {
     public List<World> worlds = new List<World>();
-    public Stack<GameState> stateStack = new Stack<GameState>();
+    public List<GameState> stateStack = new List<GameState>();
     public static int TILE_SIZE = 32;
     public static Core instance = null;
     public static System.Random rand = new System.Random();
@@ -28,8 +28,8 @@ public partial class Core {
         worlds.Add(new TiledWorld("test", testWorldInit));
 
 
-        stateStack.Push(new WorldState());
-        //stateStack.Push(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
+        stateStack.Add(new WorldState());
+        stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
     }
 
     public void testWorldInit(World w)
@@ -115,7 +115,7 @@ public partial class Core {
         if (stateStack.Count > 0)
         {
             GameState.startMenu();
-            GameState top = stateStack.Peek();
+            GameState top = stateStack[stateStack.Count-1];
             top.run();
             GameState.endMenu();
         }
@@ -131,7 +131,7 @@ public partial class Core {
 
     public void draw()
     {
-        if (stateStack.Count > 0) stateStack.Peek().draw();
+        if (stateStack.Count > 0) stateStack[stateStack.Count-1].draw();
     }
 }
 
@@ -152,7 +152,7 @@ public class TitleScreen : GameState
         //Sound.setMusic(Sound.baseSong);
         if((getTouch()&&!touch)||(getA()&&!a))
         {
-            Core.instance.stateStack.Pop();
+            Core.instance.stateStack.Remove(this);
             //Core.instance.stateStack.Push(new State());
         }
     }

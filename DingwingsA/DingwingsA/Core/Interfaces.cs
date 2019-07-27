@@ -168,7 +168,7 @@ public abstract class Entity
         }
         if(c==3&&grounded&&vx!=0)
         {
-            dashing = 1;
+            dashing = .5F;
             vdash = Mathf.Sign(vx) * 3 * WorldState.PLAYER_MOVE_SPEED;
         }
         if(c==4||c==5)

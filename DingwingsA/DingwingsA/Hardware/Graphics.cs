@@ -30,6 +30,7 @@ namespace Hardware
         public static Dictionary<char, GameSprite> charSprites = new Dictionary<char, GameSprite>();
         public static float scale = 1;
         public const int CHAR_SIZE = 16;
+        public static Color filter;
 
         public static GameSprite[] tileset = new GameSprite[256 * 32];
         public static Texture2D slime32sheet;
@@ -111,7 +112,7 @@ namespace Hardware
         public static void handleFrame(Core core)
         {
             if (core.stateStack.Count == 0) return;
-            if (core.stateStack.Peek().highGraphicsMode)
+            if (core.stateStack[core.stateStack.Count-1].highGraphicsMode)
             {
                 try
                 {
@@ -136,6 +137,7 @@ namespace Hardware
                 backbufferGUI = new RenderTarget2D(graphicsDevice, currentWidth, currentHeight, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
             graphicsDevice.SetRenderTarget(backbufferGUI);
+            setFilter(false);
             try
             {
                 core.draw();
@@ -143,10 +145,19 @@ namespace Hardware
             catch (System.Exception e) { Debug.WriteLine(e + "/" + e.StackTrace); }
 
             graphicsDevice.SetRenderTarget(null);
-
+            
             cameraMatrix = Matrix.CreateOrthographicOffCenter(-xOffset, WIDTH + xOffset, HEIGHT + yOffset, -yOffset, -2, 2);
             draw(backbufferGUI, -xOffset, -yOffset, WIDTH + Mathf.CeilToInt(xOffset) * 2, HEIGHT + Mathf.CeilToInt(yOffset) * 2);
             
+        }
+
+        public static void setFilter(bool affected)
+        {
+            Color c = Color.White;
+            if (affected)
+                c = new Color(0F,1F,0F);
+            spriteDefault.Parameters["Filter"].SetValue(c.ToVector4());
+            solidColor.Parameters["Filter"].SetValue(c.ToVector4());
         }
 
         public static void clear(Color color)
