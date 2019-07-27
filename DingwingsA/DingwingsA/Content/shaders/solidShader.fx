@@ -9,6 +9,7 @@
 
 matrix WorldViewProjection;
 float4 Color;
+float4 Filter;
 
 struct VertexShaderInput
 {
@@ -31,7 +32,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	return Color;
+	return Color*Filter;
 }
 
 technique BasicColorDrawing

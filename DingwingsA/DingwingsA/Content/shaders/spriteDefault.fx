@@ -10,6 +10,7 @@
 matrix WorldViewProjection;
 sampler2D s0;
 float4 Color;
+float4 Filter;
 
 struct VertexShaderInput
 {
@@ -37,7 +38,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float4 color = tex2D(s0,input.UV)*Color;
 	if (color.a < .5) discard;
-	return color;
+	return color*Filter;
 }
 
 technique BasicColorDrawing
