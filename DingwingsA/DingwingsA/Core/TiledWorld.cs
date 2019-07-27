@@ -234,7 +234,13 @@ public class TiledWorld : World
                     for (int i = 0; i < list.Count; i++)
                     {
                         Chunk.Tile tile = list[i];
-                        Graphics.draw(Graphics.tileset[pair.Key * 256 + tile.id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null);
+                        int id = tile.id;
+                        Coord coord = new Coord(tile.x + x * CHUNK_SIZE, tile.y + y * CHUNK_SIZE);
+                        if(Core.exceptions.ContainsKey(coord))
+                        {
+                            id = Core.exceptions[coord].newTile;
+                        }
+                        Graphics.draw(Graphics.tileset[pair.Key * 256 + id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null);
                     }
                     Graphics.unlockMaterial();
                 }

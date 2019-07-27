@@ -155,7 +155,7 @@ namespace Hardware
         {
             Color c = Color.White;
             if (affected)
-                c = new Color(0F,1F,0F);
+                c = new Color(Core.getFlag("red")?1F:0F,Core.getFlag("green")?1F:0F,Core.getFlag("blue")?1F:0F);
             spriteDefault.Parameters["Filter"].SetValue(c.ToVector4());
             solidColor.Parameters["Filter"].SetValue(c.ToVector4());
         }
@@ -413,11 +413,11 @@ namespace Hardware
             }
         }
         
-        public static void drawCharacter(char c, float x, float y)
+        public static void drawCharacter(char c, float x, float y, int scale = 1)
         {
             if (c < 256)
             {
-                draw(charSprites[c], x, y,CHAR_SIZE,CHAR_SIZE);
+                draw(charSprites[c], x, y,CHAR_SIZE*scale,CHAR_SIZE*scale);
                 return;
             }
             //TODO non-ascii characters
@@ -453,7 +453,7 @@ namespace Hardware
             //TODO non-ascii characters
         }
 
-        public static void drawStringRight(string s, float x, float y, int r = 0, int g = 0, int b = 0)
+        public static void drawStringRight(string s, float x, float y, int scale = 1)
         {
             int dx = 0;
             bool allAscii = true;
@@ -468,12 +468,12 @@ namespace Hardware
 
             if (allAscii)
             {
-                lockTextMaterial(new Color(r, g, b));
+                lockTextMaterial(Color.Black);
                 dx = 0;
                 for (int i = s.Length - 1; i >= 0; i--)
                 {
-                    dx -= CHAR_SIZE;
-                    drawCharacter(s[i], x + dx, y);
+                    dx -= CHAR_SIZE*scale;
+                    drawCharacter(s[i], x + dx, y, scale);
                 }
                 unlockMaterial();
                 return;
