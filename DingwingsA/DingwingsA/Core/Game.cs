@@ -27,11 +27,9 @@ public partial class Core {
 
         worlds.Add(new TiledWorld("test", testWorldInit));
 
-        
-
 
         stateStack.Push(new WorldState());
-        stateStack.Push(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
+        //stateStack.Push(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
     }
 
     public void testWorldInit(World w)
@@ -67,7 +65,7 @@ public partial class Core {
     
     public static bool rectCollides(unit x1, unit y1, float width1, float height1, unit x2, unit y2, float width2, float height2)
     {
-        return(x1 >= x2 + width2 || x1 + width1 <= x2||y1 >= y2 + height2 || y1 + height1 <= y2);
+        return !(x1 >= x2 + width2 || x1 + width1 <= x2 || y1 >= y2 + height2 || y1 + height1 <= y2);
     }
 
     public static int safeDiv(int value, int factor)
