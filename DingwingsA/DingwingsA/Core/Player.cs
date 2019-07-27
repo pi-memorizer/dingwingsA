@@ -29,6 +29,7 @@ public class Player : Entity
 
     public override void draw()
     {
+        if (!alive) return;
         //Graphics.drawRect(Color.White, Core.getOnscreenX(x), Core.getOnscreenY(y), width, height);
         int index = 0;
         if(grounded&&Mathf.FloorToInt(x/32)%2==0)
@@ -36,7 +37,7 @@ public class Player : Entity
             //index += (((int)HardwareInterface.timeSinceLevelLoad) % 2) * 4;
             index += 4;
         }
-        Graphics.draw(Graphics.slime32[index], Core.getOnscreenX(x-2), Core.getOnscreenY(y-1),32,32,flipped);
+        Graphics.draw(Graphics.slime32[index+8*Core.getGraphicsLevel()], Core.getOnscreenX(x-2), Core.getOnscreenY(y-1),32,32,flipped);
     }
 
     public override void run()

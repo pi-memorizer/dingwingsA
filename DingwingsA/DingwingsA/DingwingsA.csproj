@@ -46,6 +46,7 @@
     <Compile Include="Core\Interfaces.cs" />
     <Compile Include="Core\Json.cs" />
     <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\Shop.cs" />
     <Compile Include="Core\Textbox.cs" />
     <Compile Include="Core\TiledWorld.cs" />
     <Compile Include="Core\WorldState.cs" />

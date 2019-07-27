@@ -35,6 +35,20 @@ class WorldState : GameState
                 Core.setFlag("green");
             }
         }
+        if(getUp()&&!up)
+        {
+            if(Core.getFlag("music1"))
+            {
+                Core.setFlag("music2");
+                Core.setFlag("graphics2");
+            } else
+            {
+                Core.setFlag("music1");
+                Core.setFlag("graphics1");
+            }
+        }
+
+        Sound.setMusic(Sound.baseSong);
 
         World w = Core.instance.worlds[p.world];
         p.vy += HardwareInterface.deltaTime*GRAVITY;
@@ -45,10 +59,13 @@ class WorldState : GameState
                 p.grounded = false;
                 p.vy -= PLAYER_JUMP_SPEED;
             }
-            if (p.grounded && Input.getB() && !b && p.vx != 0 && p.dashing <= 0)
+            if (p.grounded && Input.getB() && !b && p.dashing <= 0)
             {
                 p.dashing = .5F;
-                p.vdash = Mathf.Sign(p.vx) * 3 * PLAYER_MOVE_SPEED;
+                if(p.vx!=0)
+                    p.vdash = Mathf.Sign(p.vx) * 3 * PLAYER_MOVE_SPEED;
+                else
+                    p.vdash = (p.flipped?-1:1) * 3 * PLAYER_MOVE_SPEED;
             }
             if (Input.getRight())
             {
@@ -68,6 +85,7 @@ class WorldState : GameState
             if(Core.deadTime<=0)
             {
                 p.x = p.y = p.vx = p.vy = 0;
+                p.alive = true;
                 p.lockCamera();
             }
         }
@@ -82,8 +100,13 @@ class WorldState : GameState
     {
         Graphics.clear(Color.White);
         Graphics.setFilter(true);
-        p.draw();
+        for(int i = 0; i < 3; i++)
+        {
+            if (i == 0 && !(Core.getFlag("green")||Core.getFlag("red")||Core.getFlag("blue"))) continue;
+            Graphics.drawParallax(Graphics.backgrounds[i], p.getCameraX(), .0001F * i);
+        }
         Core.instance.worlds[p.world].draw();
+        p.draw();
         Graphics.drawStringRight("$" + Mathf.FloorToInt(Core.animationMoney), Graphics.WIDTH-8, 8,2);
         Graphics.setFilter(false);
     }

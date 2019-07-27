@@ -37,7 +37,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float4 color = tex2D(s0,input.UV)*Color;
-	if (color.a < .5) discard;
+	if (color.a < .25) discard;
 	return color*Filter;
 }
 
@@ -45,6 +45,9 @@ technique BasicColorDrawing
 {
 	pass P0
 	{
+		AlphaBlendEnable = TRUE;
+		DestBlend = INVSRCALPHA;
+		SrcBlend = SRCALPHA;
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
 	}

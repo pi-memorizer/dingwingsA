@@ -13,6 +13,42 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin images/background1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/background1.png
+
+#begin images/background2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/background2.png
+
+#begin images/background3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/background3.png
+
 #begin images/charset.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,6 +85,30 @@
 /processorParam:TextureFormat=Color
 /build:images/slime-sheet.png
 
+#begin images/slime-sheet-small.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/slime-sheet-small.png
+
+#begin images/slime-sheet-tiny.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/slime-sheet-tiny.png
+
 #begin images/tileset1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -61,8 +121,41 @@
 /processorParam:TextureFormat=Color
 /build:images/tileset1.png
 
+#begin images/tileset1-small.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/tileset1-small.png
+
+#begin images/tileset1-tiny.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/tileset1-tiny.png
+
 #begin maps/test.json
 /copy:maps/test.json
+
+#begin music/Bongo0.wav
+/copy:music/Bongo0.wav
+
+#begin music/Bongo1.wav
+/copy:music/Bongo1.wav
+
+#begin music/Bongo2.wav
+/copy:music/Bongo2.wav
 
 #begin music/whatTheAbsoluteCrapDidIJustListenTo.wav
 /copy:music/whatTheAbsoluteCrapDidIJustListenTo.wav
@@ -78,10 +171,4 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:shaders/spriteDefault.fx
-
-#begin maps/right.json
-/copy:maps/right.json
-
-#begin maps/left.json
-/copy:maps/left.json
 
