@@ -82,3 +82,6 @@
 #begin maps/right.json
 /copy:maps/right.json
 
+#begin maps/left.json
+/copy:maps/left.json
+
