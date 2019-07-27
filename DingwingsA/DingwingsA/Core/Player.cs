@@ -17,26 +17,24 @@ public class Player : Entity
     private bool cameraUnlocked = false;
     public bool test = false;
     public bool test2 = false;
+    public int world = 0;
     public Player()
     {
-        x = 16 * Core.TILE_SIZE;
-        y = 62 * Core.TILE_SIZE;
-        desiredX = x;
-        desiredY = y;
+        x = 0;
+        y = 0;
+        width = 32;
+        height = 32;
+
     }
 
     public override void draw()
     {
+        Graphics.drawRect(Color.White, Core.getOnscreenX(x), Core.getOnscreenY(y), width, height);
     }
 
     public override void run()
     {
-        
-    }
-
-    public override bool collides(Entity e, unit x, unit y)
-    { 
-        return destinationCollision(e,x, y);
+        vy += HardwareInterface.deltaTime;
     }
     
     public void unlockCamera(unit x, unit y)

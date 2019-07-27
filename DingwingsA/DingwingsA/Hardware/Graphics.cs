@@ -16,12 +16,12 @@ namespace Hardware
         internal static GraphicsDeviceManager graphics;
         internal static GraphicsDevice graphicsDevice;
         static VertexPositionColorTexture[] verts = new VertexPositionColorTexture[2000];
-        private const int _WIDTH = 320, _HEIGHT = 180;
+        private const int _WIDTH = 320*2, _HEIGHT = 360;
         public static int WIDTH = _WIDTH, HEIGHT = _HEIGHT;
         static bool lockedMaterial = false;
         static int currentVertex = 0;
         static Matrix cameraMatrix;
-        static RenderTarget2D backbuffer, backbufferGUI;
+        static RenderTarget2D backbufferGUI;
         static int _width, _height;
 
         public static float xOffset = 0, yOffset = 0;
@@ -29,25 +29,25 @@ namespace Hardware
         public static List<Texture2D> tilesets;
         public static Texture2D bitmapFont;
         public static Dictionary<char, GameSprite> charSprites = new Dictionary<char, GameSprite>();
-        public static int scale = 1;
+        public static float scale = 1;
         public static int CHAR_SIZE = 8;
 
         public static GameSprite[] tileset = new GameSprite[256 * 32];
 
         public static void init()
         {
-            graphics.PreferredBackBufferHeight = 4 * HEIGHT;
-            graphics.PreferredBackBufferWidth = 4 * WIDTH;
-            graphics.ApplyChanges();
+            graphics.PreferredBackBufferHeight = HEIGHT;
+            graphics.PreferredBackBufferWidth = WIDTH;
+            //graphics.ApplyChanges();
         }
 
         public static void loadContent(ContentManager content)
         {
             bitmapFont = content.Load<Texture2D>("images/charset");
             tilesets = new List<Texture2D>();
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 1; i++)
             {
-                tilesets.Add(content.Load<Texture2D>("tileset" + i));
+                tilesets.Add(content.Load<Texture2D>("images/tileset" + i));
             }
 
             //shaders
@@ -81,27 +81,23 @@ namespace Hardware
 
         public static void unloadContent()
         {
-            backbuffer.Dispose();
             backbufferGUI.Dispose();
         }
 
         static void adjustCamera()
         {
-            if (_width != graphics.PreferredBackBufferWidth || _height != graphics.PreferredBackBufferHeight)
+            //if (_width != graphics.PreferredBackBufferWidth || _height != graphics.PreferredBackBufferHeight)
             {
-                _width = graphics.PreferredBackBufferWidth;
-                _height = graphics.PreferredBackBufferHeight;
-                WIDTH = _WIDTH;
                 HEIGHT = _HEIGHT;
 
-                scale = graphics.PreferredBackBufferWidth / WIDTH;
-                if (graphics.PreferredBackBufferHeight / HEIGHT < scale) scale = graphics.PreferredBackBufferHeight / HEIGHT;
-                if (scale < 2) scale = 2;
+                scale = (float)graphics.PreferredBackBufferHeight / _HEIGHT;
+                
+                WIDTH = Mathf.RoundToInt(graphics.PreferredBackBufferWidth / scale);
 
-                xOffset = (graphics.PreferredBackBufferWidth - scale * WIDTH) / 2F;
+                /*xOffset = (graphics.PreferredBackBufferWidth - scale * WIDTH) / 2F;
                 yOffset = (graphics.PreferredBackBufferHeight - scale * HEIGHT) / 2F;
                 xOffset /= scale;
-                yOffset /= scale;
+                yOffset /= scale;*/
             }
         }
 
@@ -125,40 +121,24 @@ namespace Hardware
 
             cameraMatrix = Matrix.CreateOrthographicOffCenter(-Mathf.CeilToInt(xOffset), WIDTH + Mathf.CeilToInt(xOffset), HEIGHT + Mathf.CeilToInt(yOffset), -Mathf.CeilToInt(yOffset), -2 * HEIGHT, 2 * HEIGHT);
             
-            int currentWidth = scale * (Mathf.CeilToInt(xOffset) * 2 + WIDTH);
-            int currentHeight = scale * (Mathf.CeilToInt(yOffset) * 2 + HEIGHT);
-            if(backbuffer==null||backbuffer.Width!=currentWidth||backbuffer.Height!=currentHeight)
+            int currentWidth = graphics.PreferredBackBufferWidth;
+            int currentHeight = graphics.PreferredBackBufferHeight;
+            if (backbufferGUI == null || backbufferGUI.Width != currentWidth || backbufferGUI.Height != currentHeight)
             {
-                if (backbuffer != null) backbuffer.Dispose();
-                backbuffer = new RenderTarget2D(graphicsDevice, currentWidth, currentHeight,false,SurfaceFormat.Color,DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
+                if (backbufferGUI != null) backbufferGUI.Dispose();
+                backbufferGUI = new RenderTarget2D(graphicsDevice, currentWidth, currentHeight, false, SurfaceFormat.Color, DepthFormat.Depth16, 0, RenderTargetUsage.PreserveContents);
             }
-            graphicsDevice.SetRenderTarget(backbuffer);
-            clear(new Color(0));
+            graphicsDevice.SetRenderTarget(backbufferGUI);
             try
             {
                 core.draw();
             }
             catch (System.Exception e) { Debug.WriteLine(e + "/" + e.StackTrace); }
 
-            cameraMatrix = Matrix.CreateOrthographicOffCenter(0, WIDTH, HEIGHT, 0, -2 * HEIGHT, 2 * HEIGHT);
-            if (backbufferGUI == null || backbufferGUI.Width != WIDTH * scale || backbufferGUI.Height != HEIGHT * scale)
-            {
-                if (backbufferGUI != null) backbufferGUI.Dispose();
-                backbufferGUI = new RenderTarget2D(graphicsDevice, WIDTH * scale, HEIGHT * scale,false,SurfaceFormat.Color,DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
-            }
-            graphicsDevice.SetRenderTarget(backbufferGUI);
-            clear(new Color(0));
-            try
-            {
-                core.gui();
-            }
-            catch (System.Exception e) { Debug.WriteLine(e + "/" + e.StackTrace); }
-
             graphicsDevice.SetRenderTarget(null);
 
             cameraMatrix = Matrix.CreateOrthographicOffCenter(-xOffset, WIDTH + xOffset, HEIGHT + yOffset, -yOffset, -2, 2);
-            draw(backbuffer, -xOffset, -yOffset, WIDTH + Mathf.CeilToInt(xOffset) * 2, HEIGHT + Mathf.CeilToInt(yOffset) * 2);
-            draw(backbufferGUI, 0, 0, WIDTH, HEIGHT);
+            draw(backbufferGUI, -xOffset, -yOffset, WIDTH + Mathf.CeilToInt(xOffset) * 2, HEIGHT + Mathf.CeilToInt(yOffset) * 2);
             
         }
 
@@ -183,7 +163,10 @@ namespace Hardware
                 graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
                 currentVertex = 0;
             }
-            
+
+            x = Mathf.FloorToInt(x);
+            y = Mathf.FloorToInt(y);
+
             verts[currentVertex].Position = new Vector3(x, y + s.pixelHeight, 0);
             verts[currentVertex].TextureCoordinate = new Vector2(s.x, s.y+s.height);
             verts[currentVertex + 1].Position = new Vector3(x, y, 0);
@@ -300,6 +283,9 @@ namespace Hardware
                 graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
                 currentVertex = 0;
             }
+            
+            x = Mathf.FloorToInt(x);
+            y = Mathf.FloorToInt(y);
 
             verts[currentVertex].Position = new Vector3(x, y + s.pixelHeight*scale, 0);
             verts[currentVertex].TextureCoordinate = new Vector2(s.x, s.y + s.height);
@@ -323,77 +309,7 @@ namespace Hardware
                 currentVertex += 6;
             }
         }
-
-        public static void draw3D(GameSprite s, float x, float y, Effect e, int lowerOffset = 0, int upperOffset = 0, int r = 255, int g = 255, int b = 255, int scale = 1)
-        {
-            Effect effect = e;
-            if (!lockedMaterial)
-            {
-                effect.Parameters["s0"].SetValue(s.texture);
-                effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
-                effect.Parameters["Color"].SetValue(new Color(r, g, b).ToVector4());
-                graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                effect.CurrentTechnique.Passes[0].Apply();
-            }
-            else if (currentVertex + 6 >= verts.Length)
-            {
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
-                currentVertex = 0;
-            }
-
-            verts[currentVertex].Position = new Vector3(x, y + s.pixelHeight*scale, y + s.pixelHeight * scale + lowerOffset);
-            verts[currentVertex].TextureCoordinate = new Vector2(s.x, s.y + s.height);
-            verts[currentVertex + 1].Position = new Vector3(x, y, y + upperOffset);
-            verts[currentVertex + 1].TextureCoordinate = new Vector2(s.x, s.y);
-            verts[currentVertex + 2].Position = new Vector3(x + s.pixelWidth*scale, y, y + upperOffset);
-            verts[currentVertex + 2].TextureCoordinate = new Vector2(s.x + s.width, s.y);
-
-            verts[currentVertex + 3] = verts[currentVertex + 2];
-            verts[currentVertex + 4].Position = new Vector3(x + s.pixelWidth*scale, y + s.pixelHeight*scale, y + s.pixelHeight * scale + lowerOffset);
-            verts[currentVertex + 4].TextureCoordinate = new Vector2(s.x + s.width, s.y + s.height);
-            verts[currentVertex + 5] = verts[currentVertex];
-
-            if (!lockedMaterial)
-            {
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
-                currentVertex = 0;
-            }
-            else
-            {
-                currentVertex += 6;
-            }
-        }
-
-        public static void drawGrass(GameSprite s, float x, float y, int lowerOffset = 0, int upperOffset = 0)
-        {
-            if (currentVertex + 6 >= verts.Length)
-            {
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
-                currentVertex = 0;
-            }
-
-            Vector2 wind = new Vector2(Mathf.Sin(HardwareInterface.timeSinceLevelLoad+x/100+y/100),0);
-            wind = wind * .5F + new Vector2(.5F,.5F);
-
-            verts[currentVertex].Position = new Vector3(x-1, y + s.pixelHeight, y + s.pixelHeight + lowerOffset);
-            verts[currentVertex].TextureCoordinate = new Vector2(s.x-1/256F, s.y + s.height);
-            verts[currentVertex].Color = new Color(wind.X, wind.Y, 0);
-            verts[currentVertex + 1].Position = new Vector3(x-1, y, y + upperOffset);
-            verts[currentVertex + 1].TextureCoordinate = new Vector2(s.x-1/256F, s.y);
-            verts[currentVertex + 1].Color = new Color(wind.X, wind.Y, 1);
-            verts[currentVertex + 2].Position = new Vector3(x + s.pixelWidth+1, y, y + upperOffset);
-            verts[currentVertex + 2].TextureCoordinate = new Vector2(s.x + s.width + 1 / 256F, s.y);
-            verts[currentVertex + 2].Color = new Color(wind.X, wind.Y, 1);
-
-            verts[currentVertex + 3] = verts[currentVertex + 2];
-            verts[currentVertex + 4].Position = new Vector3(x + s.pixelWidth+1, y + s.pixelHeight, y + s.pixelHeight + lowerOffset);
-            verts[currentVertex + 4].TextureCoordinate = new Vector2(s.x + s.width+1/256F, s.y + s.height);
-            verts[currentVertex + 4].Color = new Color(wind.X, wind.Y, 0);
-            verts[currentVertex + 5] = verts[currentVertex];
-            
-            currentVertex += 6;
-        }
-
+        
         public static void draw(Texture t, float x, float y, int width, int height, Effect e, int r = 255, int g = 255, int b = 255)
         {
             Effect effect = e;
@@ -410,6 +326,9 @@ namespace Hardware
                 graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
                 currentVertex = 0;
             }
+
+            x = Mathf.FloorToInt(x);
+            y = Mathf.FloorToInt(y);
 
             //for drawIntro?
             float l = 2 * HEIGHT - 1;
@@ -452,6 +371,9 @@ namespace Hardware
                 currentVertex = 0;
             }
 
+            x = Mathf.FloorToInt(x);
+            y = Mathf.FloorToInt(y);
+
             //For stuff like drawIntro needing to be called from draw() instead of gui()
             float l = 2 * HEIGHT - .01F;
             verts[currentVertex].Position = new Vector3(x, y + height, l);
@@ -472,42 +394,7 @@ namespace Hardware
                 currentVertex += 6;
             }
         }
-
-        public static void drawRect3D(Color c, float x, float y, int width, int height, int lowerOffset = 0, int upperOffset = 0, bool flip = false)
-        {
-            Effect effect = solidColor;
-            if (!lockedMaterial)
-            {
-                effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
-                effect.Parameters["Color"].SetValue(c.ToVector4());
-                graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                effect.CurrentTechnique.Passes[0].Apply();
-            }
-            else if (currentVertex + 6 >= verts.Length)
-            {
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
-                currentVertex = 0;
-            }
-
-            verts[currentVertex].Position = new Vector3(x, y + height * scale, y + height * scale + lowerOffset);
-            verts[currentVertex + 1].Position = new Vector3(x, y, y + upperOffset);
-            verts[currentVertex + 2].Position = new Vector3(x + width * scale, y, y + upperOffset);
-
-            verts[currentVertex + 3] = verts[currentVertex + 2];
-            verts[currentVertex + 4].Position = new Vector3(x + width * scale, y + height * scale, y + height * scale + lowerOffset);
-            verts[currentVertex + 5] = verts[currentVertex];
-
-            if (!lockedMaterial)
-            {
-                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
-                currentVertex = 0;
-            }
-            else
-            {
-                currentVertex += 6;
-            }
-        }
-
+        
         public static void drawCharacter(char c, float x, float y, int r, int g, int b)
         {
             if (c < 256)

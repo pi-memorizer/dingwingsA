@@ -12,17 +12,29 @@ using System.Diagnostics;
 public partial class Core {
     public List<World> worlds = new List<World>();
     public Stack<GameState> stateStack = new Stack<GameState>();
-    public static int TILE_SIZE = 16;
+    public static int TILE_SIZE = 32;
     public static Core instance = null;
     public static System.Random rand = new System.Random();
     public static Player p = new Player();
     private float touchTime = 0;
     public int frames = 0;
+    public const int COLLIDES_X = 1, COLLIDES_Y = 2, COLLIDES_BOTH = 3;
+
     public Core()
     {
         instance = this;
+
+        worlds.Add(new TiledWorld("test", testWorldInit));
+
         
-        stateStack.Push(new TitleScreen());
+
+
+        stateStack.Push(new WorldState());
+    }
+
+    public void testWorldInit(World w)
+    {
+
     }
 
     public static bool frustrumCull(unit x, unit y)
@@ -30,9 +42,9 @@ public partial class Core {
         return x < -Graphics.WIDTH / 2 || x > 3*Graphics.WIDTH / 2 || y < -Graphics.HEIGHT / 2 || y > 3*Graphics.HEIGHT / 2;
     }
     
-    public static bool rectCollides(unit x1, unit y1, int width1, int height1, unit x2, unit y2, int width2, int height2)
+    public static bool rectCollides(unit x1, unit y1, float width1, float height1, unit x2, unit y2, float width2, float height2)
     {
-        return !(x1>=x2+width2||x1+width1<=x2||y1>=y2+height2||y1+height1<=y2);
+        return(x1 >= x2 + width2 || x1 + width1 <= x2||y1 >= y2 + height2 || y1 + height1 <= y2);
     }
 
     public static int safeDiv(int value, int factor)
@@ -98,13 +110,7 @@ public partial class Core {
 
     public void draw()
     {
-        Graphics.clear(Color.Black);
         if (stateStack.Count > 0) stateStack.Peek().draw();
-    }
-
-    public void gui()
-    {
-        if (stateStack.Count > 0) stateStack.Peek().gui();
     }
 }
 

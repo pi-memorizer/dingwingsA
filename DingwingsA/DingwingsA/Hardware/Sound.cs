@@ -30,7 +30,7 @@ namespace Hardware
         {
             loopStream = new LoopStream(new AudioFileReader(baseSong));
             songInstance.Init(loopStream);
-            songInstance.Stop();     
+            songInstance.Stop();
         }
         public static void update()
         {

@@ -33,38 +33,13 @@ public class TiledWorld : World
     private int width, height;
     private int defaultBlock;
     private const int CHUNK_SIZE = 16;
-    public TiledWorld(string name,int defaultBlock = 0) : base(name)
+    public TiledWorld(string name, InitLevel initLevel, int defaultBlock = 0) : base(name,initLevel)
     {
         this.defaultBlock = defaultBlock;
-        string pathToJson = HardwareInterface.instance.Content.RootDirectory + "/maps/json/" + name + ".json";
-        string pathToMap = HardwareInterface.instance.Content.RootDirectory + "/maps/" + name + ".tmap";
-        if(File.Exists(pathToMap))
-        {
-            if(File.GetCreationTime(pathToJson)>File.GetCreationTime(pathToMap))
-            {
-                if(loadFromJson(pathToJson))
-                    saveToMap(pathToMap);
-            } else
-            {
-                loadFromMap(pathToMap);
-            }
-        } else
-        {
-            if(loadFromJson(pathToJson))
-                saveToMap(pathToMap);
-        }
+        string pathToJson = HardwareInterface.instance.Content.RootDirectory + "/maps/" + name + ".json";
+        loadFromJson(pathToJson);
     }
-
-    private void loadFromMap(string path)
-    {
-
-    }
-
-    private void saveToMap(string path)
-    {
-
-    }
-
+    
     private object findProperty(jobject o, string name, object defaultValue)
     {
         if (!o.ContainsKey("properties")) return defaultValue;
@@ -259,7 +234,7 @@ public class TiledWorld : World
                     for (int i = 0; i < list.Count; i++)
                     {
                         Chunk.Tile tile = list[i];
-                        Graphics.draw3D(Graphics.tileset[pair.Key * 256 + tile.id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null, tile.lower, tile.upper);
+                        Graphics.draw(Graphics.tileset[pair.Key * 256 + tile.id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null);
                     }
                     Graphics.unlockMaterial();
                 }

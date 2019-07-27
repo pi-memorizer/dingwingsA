@@ -47,6 +47,7 @@
     <Compile Include="Core\Json.cs" />
     <Compile Include="Core\Player.cs" />
     <Compile Include="Core\TiledWorld.cs" />
+    <Compile Include="Core\WorldState.cs" />
     <Compile Include="Hardware\GameSprite.cs" />
     <Compile Include="Hardware\Graphics.cs" />
     <Compile Include="Hardware\HardwareInterface.cs" />

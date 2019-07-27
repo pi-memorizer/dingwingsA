@@ -1,0 +1,8 @@
+shaders
+	black and white
+	subtractive channels
+controls
+	gravity
+	good platformer juice (jump slightly after falling)
+	detect when on ground (downward velocity, stopped)
+	

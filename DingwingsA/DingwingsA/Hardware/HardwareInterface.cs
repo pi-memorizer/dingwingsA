@@ -16,6 +16,8 @@ namespace Hardware
         public static GameTime time;
         public static HardwareInterface instance;
         public static Core core;
+        static bool _f5, _f11;
+        static int startingWidth, startingHeight;
 
         public HardwareInterface()
         {
@@ -70,8 +72,32 @@ namespace Hardware
         {
             Input.update();
             Sound.update();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            KeyboardState keyboardState = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+            if(keyboardState.IsKeyDown(Keys.F5)&&!_f5)
+            {
+                core = new Core();
+                //do other refreshing stuff here
+            }
+            if(keyboardState.IsKeyDown(Keys.F11)&&!_f11)
+            {
+                if(Graphics.graphics.IsFullScreen)
+                {
+                    Graphics.graphics.PreferredBackBufferWidth = startingWidth;
+                    Graphics.graphics.PreferredBackBufferHeight = startingHeight;
+                } else
+                {
+                    startingWidth = Graphics.graphics.PreferredBackBufferWidth;
+                    startingHeight = Graphics.graphics.PreferredBackBufferHeight;
+                    Graphics.graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                    Graphics.graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                }
+                Graphics.graphics.ToggleFullScreen();
+            }
+
+            _f11 = keyboardState.IsKeyDown(Keys.F11);
+            _f5 = keyboardState.IsKeyDown(Keys.F5);
 
             time = gameTime;
             core.run();
@@ -92,26 +118,6 @@ namespace Hardware
         public static Stream getAssetStream(string path)
         {
             return TitleContainer.OpenStream(instance.Content.RootDirectory + path);
-        }
-
-        public static BinaryReader getSaveReader(string path)
-        {
-#if WINDOWS
-            IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain();
-#else
-            IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication();
-#endif
-            return new BinaryReader(savegameStorage.OpenFile(path, FileMode.Open));
-        }
-
-        public static BinaryWriter getSaveWriter(string path)
-        {
-#if WINDOWS
-            IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain();
-#else
-            IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForApplication();
-#endif
-            return new BinaryWriter(savegameStorage.OpenFile(path, FileMode.Create));
         }
 
         public static float deltaTime

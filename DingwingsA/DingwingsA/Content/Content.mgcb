@@ -25,6 +25,33 @@
 /processorParam:TextureFormat=Color
 /build:images/charset.png
 
+#begin images/collision.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/collision.png
+
+#begin images/tileset1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/tileset1.png
+
+#begin maps/test.json
+/copy:maps/test.json
+
 #begin music/whatTheAbsoluteCrapDidIJustListenTo.wav
 /copy:music/whatTheAbsoluteCrapDidIJustListenTo.wav
 
