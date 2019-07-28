@@ -21,12 +21,12 @@ class WorldState : GameState
         p.vy += HardwareInterface.deltaTime*GRAVITY;
         if(Core.deadTime<=0)
         {
-            if (p.grounded && Input.getA())
+            if (Core.getFlag("jump")&&p.grounded && Input.getA())
             {
                 p.grounded = false;
                 p.vy -= PLAYER_JUMP_SPEED;
             }
-            if (p.grounded && Input.getB() && !b && p.dashing <= 0)
+            if (Core.getFlag("dash")&&p.grounded && Input.getB() && !b && p.dashing <= 0)
             {
                 p.dashing = .5F;
                 if(p.vx!=0)
@@ -34,12 +34,12 @@ class WorldState : GameState
                 else
                     p.vdash = (p.flipped?-1:1) * 3 * PLAYER_MOVE_SPEED;
             }
-            if (Input.getRight())
+            if (Core.getFlag("right")&&Input.getRight())
             {
                 p.vx = PLAYER_MOVE_SPEED;
                 p.flipped = false;
             }
-            else if (Input.getLeft())
+            else if (Core.getFlag("left")&&Input.getLeft())
             {
                 p.vx = -PLAYER_MOVE_SPEED;
                 p.flipped = true;

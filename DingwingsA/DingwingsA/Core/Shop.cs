@@ -63,9 +63,17 @@ class ShopState : GameState
 
         categories.Add("Sound");
         List<Item> soundItems = new List<Item>();
-        addItem(soundItems, new Item("Sound", "sound1", ""));
-        addItem(soundItems, new Item("Better Sound", "sound2", "", "sound1"));
+        addItem(soundItems, new Item("Sound", "music1", ""));
+        addItem(soundItems, new Item("Better Sound", "music2", "", "sound1"));
         items.Add(soundItems);
+
+        categories.Add("Abilities");
+        List<Item> abilityItems = new List<Item>();
+        addItem(abilityItems, new Item("Move Left", "left", ""));
+        addItem(abilityItems, new Item("Move Right", "right", ""));
+        addItem(abilityItems, new Item("Jump", "jump", ""));
+        addItem(abilityItems, new Item("Dash", "dash", ""));
+        items.Add(abilityItems);
 
         categories.Add("Misc");
         List<Item> miscItems = new List<Item>();
@@ -108,18 +116,23 @@ class ShopState : GameState
         {
             Item item = items[categoryIndex][i];
             int top = 150 * (i - topItem)+48;
-            int left = 200 + (i==itemIndex&&!leftSide?10:0);
-            Graphics.drawRect(Color.White, left+dx, top, 300, 150);
+            int left = 200;
+            int width = 492;
+            int height = 140;
+            Graphics.drawRect(Color.White, left+dx, top, width, height);
+            
             Graphics.drawString(item.name, left+dx, top);
             for(int j = 0; j < item.description.Count; j++)
             {
                 Graphics.drawString(item.description[j], left+dx, top + 20+j*(Graphics.CHAR_SIZE+2));
             }
+            if(!leftSide&&i==itemIndex) Graphics.draw(Graphics.buttonHighlight, left, top, 122, 47,Graphics.spriteDefault);
         }
     }
 
     public override void run()
     {
+        Sound.setMusic(Sound.shopSong);
         if(leftSide)
         {
             if(getUp()&&!up)
@@ -131,7 +144,7 @@ class ShopState : GameState
                 if (categoryIndex != categories.Count - 1) categoryIndex++;
                 if (categoryIndex >= topCategory + 5) topCategory++;
             }
-            if (itemIndex > items[categoryIndex].Count)
+            if (itemIndex >= items[categoryIndex].Count)
             {
                 itemIndex = items[categoryIndex].Count - 1;
                 topItem = 0;

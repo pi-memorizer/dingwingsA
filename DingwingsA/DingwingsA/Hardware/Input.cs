@@ -22,17 +22,6 @@ namespace Hardware
             mouseState = Mouse.GetState();
             touchState = TouchPanel.GetState();
             gamepadState = GamePad.GetState(0);
-            for(int i = 0; i < 4; i++)
-            {
-                if(GamePad.GetState(i).IsConnected)
-                {
-                    Debug.WriteLine("Pad" + i);
-                }
-                if(Joystick.GetState(i).IsConnected)
-                {
-                    Debug.WriteLine("Joy" +i);
-                }
-            }
         }
 
         public static bool getA()

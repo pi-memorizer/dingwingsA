@@ -19,6 +19,7 @@ namespace Hardware
     class Sound
     {
         public static string baseSong = "Content/music/Bongo";
+        public static string shopSong = "Content/music/shop.wav";
 
         static WaveOutEvent songInstance = new WaveOutEvent();
         static string currentTheme = "";
@@ -53,7 +54,7 @@ namespace Hardware
 
         public static void setMusic(string song, SoundEffect intro)
         {
-            song += Core.getMusicLevel() + ".wav";
+            if(song!=shopSong) song += Core.getMusicLevel() + ".wav";
             if (changedThisFrame) return;
             if (currentTheme == song) {
                 if(songInstance.PlaybackState!=PlaybackState.Playing)
@@ -72,7 +73,7 @@ namespace Hardware
 
         public static void setMusic(string song)
         {
-            song += Core.getMusicLevel()+".wav";
+            if(song!=shopSong) song += Core.getMusicLevel()+".wav";
             if (changedThisFrame) return;
             if (currentTheme == song)
             {

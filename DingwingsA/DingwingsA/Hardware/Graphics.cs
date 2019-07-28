@@ -37,6 +37,7 @@ namespace Hardware
         public static Texture2D[] backgrounds = new Texture2D[3];
         public static Texture2D[] ads = new Texture2D[3];
         public static Texture2D shop;
+        public static Texture2D buttonHighlight, buttonDisabled, buttonActive;
 
         public static void init()
         {
@@ -72,6 +73,8 @@ namespace Hardware
             ads[1] = content.Load<Texture2D>("images/dr hate him");
             ads[2] = content.Load<Texture2D>("images/1000player");
             shop = content.Load<Texture2D>("images/shop");
+            buttonActive = content.Load<Texture2D>("images/active-button");
+            buttonHighlight = content.Load<Texture2D>("images/button-highlight");
 
             //shaders
             spriteDefault = content.Load<Effect>("shaders/spriteDefault");

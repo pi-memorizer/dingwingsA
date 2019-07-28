@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:images/1000player.png
 
+#begin images/active-button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/active-button.png
+
 #begin images/background1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -61,6 +73,18 @@
 /processorParam:TextureFormat=Color
 /build:images/background3.png
 
+#begin images/button-highlight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/button-highlight.png
+
 #begin images/charset.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -84,6 +108,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/collision.png
+
+#begin images/disabled-button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/disabled-button.png
 
 #begin images/dr hate him.png
 /importer:TextureImporter
@@ -204,6 +240,9 @@
 
 #begin music/Bongo2.wav
 /copy:music/Bongo2.wav
+
+#begin music/Shop.wav
+/copy:music/Shop.wav
 
 #begin music/whatTheAbsoluteCrapDidIJustListenTo.wav
 /copy:music/whatTheAbsoluteCrapDidIJustListenTo.wav
