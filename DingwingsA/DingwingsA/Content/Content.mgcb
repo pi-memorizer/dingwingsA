@@ -424,3 +424,21 @@
 /processorParam:DebugMode=Auto
 /build:shaders/spriteDefault.fx
 
+#begin voiceover/EndVoiceover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:voiceover/EndVoiceover.wav
+
+#begin voiceover/IntroVoiceover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:voiceover/IntroVoiceover.wav
+
+#begin voiceover/MiddleVoiceover.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:voiceover/MiddleVoiceover.wav
+

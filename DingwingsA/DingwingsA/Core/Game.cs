@@ -8,6 +8,7 @@ using unit = System.Single;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Audio;
 
 public partial class Core {
     public List<World> worlds = new List<World>();
@@ -24,7 +25,7 @@ public partial class Core {
     public static float deadTime = 0;
     public static int money = 0;
     public static float animationMoney = 0;
-    public static float newItemTime = 0;
+    public static float newItemTime = 5;
 
     public static float[] adStates = new float[3];
     public static int[] adStages = new int[3];
@@ -258,23 +259,107 @@ public partial class Core {
 
 public class TitleScreen : GameState
 {
+    int state = 0;
+    SoundEffectInstance waitingInstance = null;
+    float time = 0;
     public TitleScreen() : base()
     {
-
+        Core.p.unlockCamera(0, -10000);
     }
 
     public override void draw()
     {
-        Graphics.draw(Graphics.titlescreen, (Graphics.WIDTH - Graphics._WIDTH) / 2, 0, Graphics._WIDTH, Graphics.HEIGHT, Graphics.spriteDefault);
+        if(state==0)
+        {
+            Graphics.draw(Graphics.titlescreen, (Graphics.WIDTH - Graphics._WIDTH) / 2, 0, Graphics._WIDTH, Graphics.HEIGHT, Graphics.spriteDefault);
+        } else
+        {
+            Core.instance.stateStack[Core.instance.stateStack.IndexOf(this) - 1].draw();
+        }
+        
     }
 
     public override void run()
     {
-        //Sound.setMusic(Sound.baseSong);
-        if((getA()&&!a)||(getStart()&&!start))
+        if(time>0)
+        {
+            time -= HardwareInterface.deltaTime;
+            if (time <= 0) state++;
+            return;
+        }
+        if(waitingInstance != null)
+        {
+            if(waitingInstance.State==SoundState.Stopped)
+            {
+                waitingInstance = null;
+                state++;
+            }
+            return;
+        }
+        if(state==0)
+        {
+            if((getA()&&!a)||(getStart()&&!start))
+            {
+                state++;
+                Core.setFlag("ads");
+            }
+        } else if(state==1)
+        {
+            time = 1;
+        } else if(state==2)
+        {
+            waitingInstance = Sound.startVoiceover.CreateInstance();
+            waitingInstance.Play();
+            Core.instance.stateStack.Add(new Textbox("No? Well, I suppose I can help you with that. Don't expect it to happen again.", 9));
+            Core.instance.stateStack.Add(new Textbox("Oh hello there. Seems to me that you're... ah... missing a few things. A character? Have you got a character?", 10));
+            
+        } else if(state==3)
+        {
+            //spawn player
+            p.x = 0;
+            p.y = -16 * 32;
+            p.lockCamera();
+            time = 1;
+        } else if(state==4)
+        {
+            //simulate until grounded and start
+            if(p.grounded)
+            {
+                waitingInstance = Sound.middleVoiceover.CreateInstance();
+                waitingInstance.Play();
+                
+                Core.instance.stateStack.Add(new Textbox("I hear they accept credit. Press Enter on the Keyboard or Start on a controller to open the store now.", 6));
+                Core.instance.stateStack.Add(new Textbox("You really did start with nothing. Well you'll just have to visit the store.", 5));
+                Core.instance.stateStack.Add(new Textbox("Why aren't you moving? Oh my goodness me you don't even have any controls!", 7));
+                Core.instance.stateStack.Add(new Textbox("Now if you move to either side of the screen you'll see some platforms. You'll want to try to... wait.", 7));
+                Core.instance.stateStack.Add(new Textbox("Ah, now that's much better.", 2));
+            } else
+            {
+                p.vy += HardwareInterface.deltaTime * WorldState.GRAVITY;
+                p.simulate(Core.instance.worlds[Core.p.world]);
+            }
+        } else if(state==5)
+        {
+            //open shop
+            if(getStart()&&!start)
+            {
+                ShopState.allItems["left"].unlocked = true;
+                ShopState.allItems["right"].unlocked = true;
+                Core.instance.stateStack.Add(new ShopState());
+                state++;
+            }
+        } else if(state==6)
+        {
+            Sound.stopMusic();
+            waitingInstance = Sound.endVoiceover.CreateInstance();
+            waitingInstance.Play();
+            Core.instance.stateStack.Add(new Textbox("Past that, get out there and try and make some money.", 4));
+            Core.instance.stateStack.Add(new Textbox("You ought to check back into the store every so often. You might find some products you like.", 6));
+            
+        } else
         {
             Core.instance.stateStack.Remove(this);
-            //Core.instance.stateStack.Push(new State());
+            Core.setFlag("ads", false);
         }
     }
 }

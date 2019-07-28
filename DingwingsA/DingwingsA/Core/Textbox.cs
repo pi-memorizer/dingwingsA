@@ -14,10 +14,12 @@ class Textbox : GameState
     string msg;
     List<string> lines = new List<string>();
     float time = 0;
+    float closeTimer;
 
-    public Textbox(string msg)
+    public Textbox(string msg, float closeTimer = -100)
     {
         this.msg = msg;
+        this.closeTimer = closeTimer;
         string line = "";
         string[] s = msg.Split(new char[] { ' ' });
         for(int i = 0; i < s.Length; i++)
@@ -52,9 +54,19 @@ class Textbox : GameState
     public override void run()
     {
         time += HardwareInterface.deltaTime;
-        if(getA()&&!a)
+        if(closeTimer>-100)
         {
-            Core.instance.stateStack.Remove(this);
+            closeTimer -= HardwareInterface.deltaTime;
+            if(closeTimer<=0)
+            {
+                Core.instance.stateStack.Remove(this);
+            }
+        } else
+        {
+            if (getA() && !a)
+            {
+                Core.instance.stateStack.Remove(this);
+            }
         }
     }
 }
