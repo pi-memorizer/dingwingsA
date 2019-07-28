@@ -80,7 +80,7 @@ class ShopState : GameState
         categories.Add("Misc");
         List<Item> miscItems = new List<Item>();
         addItem(miscItems, new Item("Disable Ads", "ads", "Remove those pesky ads cluttering up your life!"));
-        addItem(miscItems, new Item("Premium Ads", "premium", "Need to know about all the new products and stories? Premium ads will always keep you in the loop!", "ads"));
+        addItem(miscItems, new Item("Premium Ads", "premium", "Need info on all the new products and stories? Premium ads will always keep you in the loop!", "ads"));
         addItem(miscItems, new Item("Win Game", "win", "Just another pay-to-win game! Join the ranks of winners today!"));
         items.Add(miscItems);
     }
