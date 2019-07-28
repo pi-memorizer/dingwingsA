@@ -167,7 +167,7 @@ public abstract class Entity
             jump = true;
             Core.addException(new Coord(tilex, tiley), 52, .25F);
         }
-        if(c==3&&grounded&&vx!=0)
+        if (c == 3 && grounded && vx != 0 && Core.rectCollides(tilex * Core.TILE_SIZE + 4, tiley * Core.TILE_SIZE + 8, Core.TILE_SIZE - 8, Core.TILE_SIZE - 8, x, y, width, height))
         {
             dashing = .5F;
             vdash = Mathf.Sign(vx) * 3 * WorldState.PLAYER_MOVE_SPEED;
@@ -178,7 +178,10 @@ public abstract class Entity
             if(p!=null&&!p.coins.Contains(new Coord(tilex,tiley)))
             {
                 //get the coins
+                if (c == 4) Core.money += 100;
+                else Core.money += 500;
                 p.coins.Add(new Coord(tilex, tiley));
+                Core.addException(new Coord(tilex, tiley), 0, float.MaxValue);
             }
         }
         if(c==6)

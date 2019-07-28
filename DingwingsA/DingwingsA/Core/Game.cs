@@ -25,6 +25,8 @@ public partial class Core {
     public static int money = 0;
     public static float animationMoney = 0;
 
+    public static float[] adStates = new float[3];
+
     public Core()
     {
         instance = this;
@@ -33,8 +35,9 @@ public partial class Core {
         p.world = 0;
 
         stateStack.Add(new WorldState());
-        stateStack.Add(new ShopState());
-        //stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
+        //stateStack.Add(new ShopState());
+        stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
+        stateStack.Add(new TitleScreen());
     }
 
     public void testWorldInit(World w)
@@ -180,7 +183,23 @@ public partial class Core {
         if (stateStack.Count > 0)
         {
             GameState.startMenu();
-            GameState top = stateStack[stateStack.Count-1];
+            GameState top = stateStack[stateStack.Count - 1];
+            if (!(top is ShopState || getFlag("ads")))
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    if(adStates[i]>0)
+                    {
+                        adStates[i] -= HardwareInterface.deltaTime;
+                    } else
+                    {
+                        if(HardwareInterface.deltaTime>rand.NextDouble()*(top is TitleScreen?10:50))
+                        {
+                            adStates[i] = 5;
+                        }
+                    }
+                }
+            }
             top.run();
             GameState.endMenu();
         }
@@ -197,6 +216,24 @@ public partial class Core {
     public void draw()
     {
         if (stateStack.Count > 0) stateStack[stateStack.Count-1].draw();
+        if (!(stateStack[stateStack.Count - 1] is ShopState || getFlag("ads")))
+        {
+            if(adStates[0]>0)
+            {
+                Graphics.draw(Graphics.ads[0], 16, 16, Graphics.ads[0].Width,Graphics.ads[0].Height,Graphics.spriteDefault);
+            }
+            if (adStates[1] > 0&&!(stateStack[stateStack.Count-1] is Textbox))
+            {
+                Graphics.draw(Graphics.ads[1], 16, Graphics.HEIGHT-Graphics.ads[1].Height-16, Graphics.ads[1].Width, Graphics.ads[1].Height, Graphics.spriteDefault);
+            }
+            if (adStates[2] > 0)
+            {
+                if(Mathf.FloorToInt(HardwareInterface.timeSinceLevelLoad*2)%2==0)
+                    Graphics.draw(Graphics.ads[2], Graphics.WIDTH-Graphics.ads[2].Width-16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
+                else
+                    Graphics.drawRect(Color.Red, Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height);
+            }
+        }
     }
 }
 
@@ -215,7 +252,7 @@ public class TitleScreen : GameState
     public override void run()
     {
         //Sound.setMusic(Sound.baseSong);
-        if((getTouch()&&!touch)||(getA()&&!a))
+        if((getA()&&!a))
         {
             Core.instance.stateStack.Remove(this);
             //Core.instance.stateStack.Push(new State());

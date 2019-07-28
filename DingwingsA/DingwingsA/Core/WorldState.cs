@@ -14,39 +14,6 @@ class WorldState : GameState
     public const float PLAYER_JUMP_SPEED = 300;
     public override void run()
     {
-        if (GameState.getStart() && !GameState.start)
-        {
-            if(Core.getFlag("blue"))
-            {
-                Core.setFlag("red", false);
-                Core.setFlag("blue", false);
-                Core.setFlag("green", false);
-            } else
-            if (Core.getFlag("red"))
-            {
-                Core.setFlag("blue");
-            }
-            else if (Core.getFlag("green"))
-            {
-                Core.setFlag("red");
-            }
-            else
-            {
-                Core.setFlag("green");
-            }
-        }
-        if(getUp()&&!up)
-        {
-            if(Core.getFlag("music1"))
-            {
-                Core.setFlag("music2");
-                Core.setFlag("graphics2");
-            } else
-            {
-                Core.setFlag("music1");
-                Core.setFlag("graphics1");
-            }
-        }
 
         Sound.setMusic(Sound.baseSong);
 
@@ -91,6 +58,7 @@ class WorldState : GameState
                 p.x = p.y = p.vx = p.vy = 0;
                 p.alive = true;
                 p.lockCamera();
+                Core.instance.stateStack.Add(new HealthcareState());
             }
         }
         p.simulate(w);
@@ -104,7 +72,7 @@ class WorldState : GameState
     {
         Graphics.clear(Color.White);
         Graphics.setFilter(true);
-        for(int i = 0; i < 3; i++)
+        if(Core.getFlag("background")) for(int i = 0; i < 3; i++)
         {
             if (i == 0 && !(Core.getFlag("green")||Core.getFlag("red")||Core.getFlag("blue"))) continue;
             Graphics.drawParallax(Graphics.backgrounds[i], p.getCameraX(), .0001F * i);
