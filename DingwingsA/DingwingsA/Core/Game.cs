@@ -31,8 +31,8 @@ public partial class Core {
     {
         instance = this;
 
-        worlds.Add(new TiledWorld("test", testWorldInit));
-        //p.world = 0;
+        worlds.Add(new TiledWorld("left", testWorldInit));
+        p.world = 0;
 
         stateStack.Add(new WorldState());
         //stateStack.Add(new ShopState());

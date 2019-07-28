@@ -259,3 +259,9 @@
 /processorParam:DebugMode=Auto
 /build:shaders/spriteDefault.fx
 
+#begin maps/left.json
+/copy:maps/left.json
+
+#begin maps/right.json
+/copy:maps/right.json
+
