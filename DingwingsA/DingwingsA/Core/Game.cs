@@ -205,10 +205,10 @@ public partial class Core {
                         adStates[i] -= HardwareInterface.deltaTime;
                     } else
                     {
-                        if(HardwareInterface.deltaTime>rand.NextDouble()*(top is TitleScreen?10:50))
+                        if(HardwareInterface.deltaTime>rand.NextDouble()*(top is TitleScreen?10:20))
                         {
                             adStates[i] = 5;
-                            adStages[i] = rand.Next(2);
+                            adStages[i] = rand.Next(3);
                         }
                     }
                 }
@@ -241,12 +241,12 @@ public partial class Core {
             }
             if (adStates[2] > 0)
             {
-                if(adStages[2]==0)
+                if(adStages[2]!=1)
                 {
                     if (Mathf.FloorToInt(HardwareInterface.timeSinceLevelLoad * 2) % 2 == 0)
-                        Graphics.draw(Graphics.ads[2], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
+                        Graphics.draw(Graphics.ads[2+4*adStages[2]], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
                     else
-                        Graphics.draw(Graphics.ads[3], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
+                        Graphics.draw(Graphics.ads[3+4*adStages[2]], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
                 } else
                 {
                     Graphics.draw(Graphics.ads[2+4], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);

@@ -35,7 +35,7 @@ namespace Hardware
         public static Texture2D[] slime32sheet;
         public static GameSprite[] slime32;
         public static Texture2D[] backgrounds = new Texture2D[3];
-        public static Texture2D[] ads = new Texture2D[7];
+        public static Texture2D[] ads = new Texture2D[12];
         public static Texture2D shop, newItem;
         public static Texture2D buttonHighlight, buttonDisabled, buttonActive;
         public static Texture2D titlescreen, shopCarrot, medbill;
@@ -79,6 +79,11 @@ namespace Hardware
             ads[4] = content.Load<Texture2D>("images/click");
             ads[5] = content.Load<Texture2D>("images/fire");
             ads[6] = content.Load<Texture2D>("images/shopping");
+            ads[7] = null;
+            ads[8] = content.Load<Texture2D>("images/13signs");
+            ads[9] = content.Load<Texture2D>("images/beef");
+            ads[10] = content.Load<Texture2D>("images/consume");
+            ads[11] = content.Load<Texture2D>("images/consume-blink");
             shop = content.Load<Texture2D>("images/shop");
             buttonActive = content.Load<Texture2D>("images/active-button");
             buttonDisabled = content.Load<Texture2D>("images/disabled-button");

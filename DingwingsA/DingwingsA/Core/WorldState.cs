@@ -76,12 +76,12 @@ class WorldState : GameState
             {
                 Core.instance.stateStack.Add(new ShopState());
             }
-            if(p.x>85*32&&!Core.getFlag("success1"))
+            if(p.x>85*32&&p.y<18*32&&!Core.getFlag("success1"))
             {
                 Core.setFlag("success1");
                 Sound.success.Play();
             }
-            if (p.x < -75*32 && !Core.getFlag("success2"))
+            if (p.x < -75*32 && p.y<18*32&&!Core.getFlag("success2"))
             {
                 Core.setFlag("success2");
                 Sound.success.Play();
