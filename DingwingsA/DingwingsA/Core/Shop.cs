@@ -54,32 +54,32 @@ class ShopState : GameState
     {
         categories.Add("Graphics");
         List<Item> graphicItems = new List<Item>();
-        addItem(graphicItems, new Item("Green Channel", "green", "You'll need me to see you!"));
-        addItem(graphicItems, new Item("Red Channel", "red", "You'll need me to see you!"));
-        addItem(graphicItems, new Item("Blue Channel", "blue", "You'll need me to see you!"));
-        addItem(graphicItems, new Item("Background", "background", "Learn to see past "));
-        addItem(graphicItems, new Item("Graphics", "graphics1", "Learn to see past blocky shapes and unclear items! Upgrade your sight today!"));
-        addItem(graphicItems, new Item("Graphics 2", "graphics2", "If you ever wanted to see the world in HD, this is your chance!", "graphics1"));
+        addItem(graphicItems, new Item("Add Green", "green", "Add some color to your life! Learn to see gorgeous greens all around you!"));
+        addItem(graphicItems, new Item("Add Red", "red", "Add some color to your life! Learn to see the rambunctious reds all over!"));
+        addItem(graphicItems, new Item("Add Blue", "blue", "Add some color to your life! Learn to see the beautiful blues everywhere!"));
+        addItem(graphicItems, new Item("Scenic Views", "background", "Purchase this updgrade to enjoy the iconic, scenic views of the your city!"));
+        addItem(graphicItems, new Item("HD Graphics", "graphics1", "Learn to see past blocky shapes and unclear items! Upgrade your sight today!"));
+        addItem(graphicItems, new Item("4k Graphics", "graphics2", "Need a sharper perspective? Buy 4k graphics and experience the best views money can buy!", "graphics1"));
         items.Add(graphicItems);
 
         categories.Add("Sound");
         List<Item> soundItems = new List<Item>();
-        addItem(soundItems, new Item("Sound", "music1", "Tired of eternal bongos? Get the latest sick beats to soothe your frazzled soul!"));
-        addItem(soundItems, new Item("Better Sound", "music2", "For the consumers in need of a true melody.", "music1"));
+        addItem(soundItems, new Item("Improved Soundtrack", "music1", "Tired of eternal bongos? Get the latest sick beats to soothe your frazzled soul!"));
+        addItem(soundItems, new Item("Award-winning Soundtrack", "music2", "For the consumers in need of a true artistic melody!", "music1"));
         items.Add(soundItems);
 
         categories.Add("Abilities");
         List<Item> abilityItems = new List<Item>();
         addItem(abilityItems, new Item("Move Left", "left", "If you've been stuck making three rights for a left your whole life, then do we have a product for you!"));
         addItem(abilityItems, new Item("Move Right", "right", "You'll always be wrong without the ability to go right! Invest in this lifechanging ability today!"));
-        addItem(abilityItems, new Item("Jump", "jump", "Ever wondered what life is like off the ground? Grow that leg and jump!"));
-        addItem(abilityItems, new Item("Dash", "dash", "Drink BlueCow (TM) to get your wings today!"));
+        addItem(abilityItems, new Item("Jump", "jump", "Ever wondered what life is like off the ground? Find out now! (Press Z on keyboard or A on controller to use)"));
+        addItem(abilityItems, new Item("Dash", "dash", "Drink BlueCow (TM) to get your wings today! (Press X on keyboard or B on controller to use)"));
         items.Add(abilityItems);
 
         categories.Add("Misc");
         List<Item> miscItems = new List<Item>();
-        addItem(miscItems, new Item("No Ads", "ads", "Remove those pesky ads cluttering up your life!"));
-        addItem(miscItems, new Item("Win Game", "win", "Tired of life being just one big game? Purchase the end of your trials now"));
+        addItem(miscItems, new Item("Disable Ads", "ads", "Remove those pesky ads cluttering up your life!"));
+        addItem(miscItems, new Item("Win Game", "win", "Just another pay-to-win game! Join the ranks of winners today!"));
         items.Add(miscItems);
     }
 
