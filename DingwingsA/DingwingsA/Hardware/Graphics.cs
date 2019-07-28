@@ -35,6 +35,8 @@ namespace Hardware
         public static Texture2D[] slime32sheet;
         public static GameSprite[] slime32;
         public static Texture2D[] backgrounds = new Texture2D[3];
+        public static Texture2D[] ads = new Texture2D[3];
+        public static Texture2D shop;
 
         public static void init()
         {
@@ -66,6 +68,10 @@ namespace Hardware
             {
                 backgrounds[i] = content.Load<Texture2D>("images/background" + (i + 1));
             }
+            ads[0] = content.Load<Texture2D>("images/single-slimes");
+            ads[1] = content.Load<Texture2D>("images/dr hate him");
+            ads[2] = content.Load<Texture2D>("images/1000player");
+            shop = content.Load<Texture2D>("images/shop");
 
             //shaders
             spriteDefault = content.Load<Effect>("shaders/spriteDefault");
@@ -146,6 +152,7 @@ namespace Hardware
                 backbufferGUI = new RenderTarget2D(graphicsDevice, currentWidth, currentHeight, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
             }
             graphicsDevice.SetRenderTarget(backbufferGUI);
+            graphicsDevice.Clear(Color.Black);
             setFilter(false);
             try
             {

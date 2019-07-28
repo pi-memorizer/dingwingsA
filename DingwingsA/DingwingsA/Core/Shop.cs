@@ -15,9 +15,11 @@ class ShopState : GameState
         const int MAX_LENGTH = 20;
         public bool bought, unlocked;
         public int price = 100;
+        public string prereq;
 
-        public Item(string name, string flag, string description)
+        public Item(string name, string flag, string description, string prereq = "")
         {
+            this.prereq = prereq;
             this.name = name;
             this.flag = flag;
             this.description = new List<string>();
@@ -54,7 +56,22 @@ class ShopState : GameState
         addItem(graphicItems, new Item("Green Channel", "green", "You'll need me to see you!"));
         addItem(graphicItems, new Item("Red Channel", "red", "You'll need me to see you!"));
         addItem(graphicItems, new Item("Blue Channel", "blue", "You'll need me to see you!"));
+        addItem(graphicItems, new Item("Background", "background", ""));
+        addItem(graphicItems, new Item("Graphics", "graphics1", ""));
+        addItem(graphicItems, new Item("Graphics 2", "graphics2", "", "graphics1"));
         items.Add(graphicItems);
+
+        categories.Add("Sound");
+        List<Item> soundItems = new List<Item>();
+        addItem(soundItems, new Item("Sound", "sound1", ""));
+        addItem(soundItems, new Item("Better Sound", "sound2", "", "sound1"));
+        items.Add(soundItems);
+
+        categories.Add("Misc");
+        List<Item> miscItems = new List<Item>();
+        addItem(miscItems, new Item("No Ads", "ads", ""));
+        items.Add(miscItems);
+
 
         foreach (var item in allItems.Values)
         {
@@ -80,22 +97,23 @@ class ShopState : GameState
 
     public override void draw()
     {
-        Core.instance.stateStack[Core.instance.stateStack.IndexOf(this) - 1].draw();
-        Graphics.drawRect(Color.White, 0, 0, 150, 300);
+        float dx = (Graphics.WIDTH-Graphics._WIDTH)/ 2;
+        /*Graphics.drawRect(Color.White, 0, 0, 150, 300);
         for (int i = topCategory; i < topCategory + 5&&i<categories.Count; i++)
         {
             Graphics.drawString(categories[i], categoryIndex == i ? 10 : 0, 60 * (i - topCategory));
-        }
+        }*/
+        Graphics.draw(Graphics.shop, dx, 0, Graphics.WIDTH, Graphics.HEIGHT,Graphics.spriteDefault);
         for (int i = topItem; i < topItem + 3&&i<items[categoryIndex].Count; i++)
         {
             Item item = items[categoryIndex][i];
-            int top = 150 * (i - topItem);
-            int left = 200 + (i==itemIndex?10:0);
-            Graphics.drawRect(Color.White, left, top, 300, 150);
-            Graphics.drawString(item.name, left, top);
+            int top = 150 * (i - topItem)+48;
+            int left = 200 + (i==itemIndex&&!leftSide?10:0);
+            Graphics.drawRect(Color.White, left+dx, top, 300, 150);
+            Graphics.drawString(item.name, left+dx, top);
             for(int j = 0; j < item.description.Count; j++)
             {
-                Graphics.drawString(item.description[j], left, top + 20+j*(Graphics.CHAR_SIZE+2));
+                Graphics.drawString(item.description[j], left+dx, top + 20+j*(Graphics.CHAR_SIZE+2));
             }
         }
     }
@@ -113,7 +131,11 @@ class ShopState : GameState
                 if (categoryIndex != categories.Count - 1) categoryIndex++;
                 if (categoryIndex >= topCategory + 5) topCategory++;
             }
-            if (itemIndex > items[categoryIndex].Count) itemIndex = items[categoryIndex].Count - 1;
+            if (itemIndex > items[categoryIndex].Count)
+            {
+                itemIndex = items[categoryIndex].Count - 1;
+                topItem = 0;
+            }
             if(getRight()&&!right)
             {
                 leftSide = false;
@@ -137,7 +159,7 @@ class ShopState : GameState
             if(getA()&&!a)
             {
                 Item item = items[categoryIndex][itemIndex];
-                if(item.unlocked&&!item.bought)
+                if(item.unlocked&&!item.bought&&(item.prereq==""||Core.getFlag(item.prereq)))
                 {
                     item.bought = true;
                     Core.money -= item.price;

@@ -244,6 +244,10 @@ public class TiledWorld : World
                                 if (id < 0) id = tile.id + id;
                             }
                         }
+                        if(id>=37&&id<=40)
+                        {
+                            if (Mathf.FloorToInt(HardwareInterface.timeSinceLevelLoad*5+3.14F*tile.x+tile.y)%(id>=38&&id<=39?4:2)==0) id += 16;
+                        }
                         Graphics.draw(Graphics.tileset[pair.Key * 256 + id], Core.getOnscreenX(Core.TILE_SIZE * (tile.x + x * CHUNK_SIZE)), Core.getOnscreenY(Core.TILE_SIZE * (tile.y + y * CHUNK_SIZE)), null);
                     }
                     Graphics.unlockMaterial();

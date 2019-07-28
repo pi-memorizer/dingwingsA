@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Core\Coord.cs" />
     <Compile Include="Core\Game.cs" />
+    <Compile Include="Core\HealthcareState.cs" />
     <Compile Include="Core\Interfaces.cs" />
     <Compile Include="Core\Json.cs" />
     <Compile Include="Core\Player.cs" />

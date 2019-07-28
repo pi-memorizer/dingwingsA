@@ -40,8 +40,9 @@ class Textbox : GameState
         int index = Core.instance.stateStack.FindIndex(a => a==this);
         if(index>0)Core.instance.stateStack[index - 1].draw();
         int maxChars = Mathf.FloorToInt(time*30);
-        Graphics.drawRect(Color.White, Graphics.WIDTH / 2 - WIDTH / 2, Graphics.HEIGHT - HEIGHT, WIDTH, HEIGHT);
-        for(int i = 0; i < lines.Count; i++)
+        Graphics.drawRect(new Color(77,66,86), Graphics.WIDTH / 2 - WIDTH / 2, Graphics.HEIGHT - HEIGHT, WIDTH, HEIGHT);
+        Graphics.drawRect(Color.White, Graphics.WIDTH / 2 - WIDTH / 2+1, Graphics.HEIGHT - HEIGHT+1, WIDTH-2, HEIGHT-2);
+        for (int i = 0; i < lines.Count; i++)
         {
             Graphics.drawString(lines[i], Graphics.WIDTH / 2 - MAX_LENGTH*Graphics.CHAR_SIZE / 2, Graphics.HEIGHT - HEIGHT+i*Graphics.CHAR_SIZE+Graphics.CHAR_SIZE,maxChars);
             maxChars -= lines[i].Length;
@@ -51,5 +52,9 @@ class Textbox : GameState
     public override void run()
     {
         time += HardwareInterface.deltaTime;
+        if(getA()&&!a)
+        {
+            Core.instance.stateStack.Remove(this);
+        }
     }
 }
