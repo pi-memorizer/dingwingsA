@@ -12,10 +12,10 @@ class HealthcareState : GameState
     public override void draw()
     {
         Core.instance.stateStack[Core.instance.stateStack.IndexOf(this) - 1].draw();
-        int width = 100;
+        int width = 150;
         int height = 200;
         float y = -Mathf.Pow(time-1,3)*Graphics.HEIGHT+height/2;
-        Graphics.drawRect(Color.Red, Graphics.WIDTH / 2 - width / 2, y, width, height);
+        Graphics.draw(Graphics.medbill, Graphics.WIDTH / 2 - width / 2, y, width, height, Graphics.spriteDefault);
     }
 
     public override void run()

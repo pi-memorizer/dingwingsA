@@ -12,9 +12,33 @@ class WorldState : GameState
     public const float GRAVITY = 500;
     public const float PLAYER_MOVE_SPEED = 150;
     public const float PLAYER_JUMP_SPEED = 300;
+    public float newItemTime = 3;
     public override void run()
     {
-
+        if (Core.newItemTime <= 0)
+        {
+            Core.newItemTime = 10;
+            ShopState.unlockables.MoveNext();
+            var item = ShopState.unlockables.Current;
+            if (item != null)
+            {
+                bool valid = false;
+                for (int i = 0; i < item.Length; i++)
+                {
+                    item[i].unlocked = true;
+                    if (item[i].prereq == "" || Core.getFlag(item[i].prereq)) valid = true;
+                }
+                if (valid)
+                {
+                    newItemTime = 0;
+                }
+            }
+        }
+        else Core.newItemTime -= HardwareInterface.deltaTime;
+        if(newItemTime<3)
+        {
+            newItemTime += HardwareInterface.deltaTime;
+        }
         Sound.setMusic(Sound.baseSong);
 
         World w = Core.instance.worlds[p.world];
@@ -79,7 +103,8 @@ class WorldState : GameState
         }
         Core.instance.worlds[p.world].draw();
         p.draw();
-        Graphics.drawStringRight("$" + Mathf.FloorToInt(Core.animationMoney), Graphics.WIDTH-8, 8,2);
         Graphics.setFilter(false);
+        Graphics.drawStringRight("$" + Mathf.FloorToInt(Core.animationMoney), Graphics.WIDTH - 8, 8, 2);
+        Graphics.draw(Graphics.newItem, Graphics.WIDTH - 5 - Graphics.newItem.Width, Graphics.HEIGHT-Graphics.newItem.Height+Mathf.Pow(newItemTime - 1.5F, 2) * 50-5, Graphics.newItem.Width, Graphics.newItem.Height,Graphics.spriteDefault);
     }
 }

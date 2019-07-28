@@ -32,7 +32,10 @@ public class Player : Entity
         if (!alive) return;
         //Graphics.drawRect(Color.White, Core.getOnscreenX(x), Core.getOnscreenY(y), width, height);
         int index = 0;
-        if(grounded&&Mathf.FloorToInt(x/32)%2==0)
+        if (Core.getFlag("dash") && Core.getFlag("jump")) index += 3;
+        else if (Core.getFlag("dash")) index += 1;
+        else if (Core.getFlag("jump")) index += 2;
+        if (grounded && Mathf.FloorToInt(x / 32) % 2 == 0||(Core.getFlag("jump")&&!grounded))
         {
             //index += (((int)HardwareInterface.timeSinceLevelLoad) % 2) * 4;
             index += 4;

@@ -24,6 +24,7 @@ public partial class Core {
     public static float deadTime = 0;
     public static int money = 0;
     public static float animationMoney = 0;
+    public static float newItemTime = 0;
 
     public static float[] adStates = new float[3];
 
@@ -246,7 +247,7 @@ public class TitleScreen : GameState
 
     public override void draw()
     {
-        Graphics.draw(Graphics.bitmapFont, (Graphics.WIDTH - 160) / 2, (Graphics.HEIGHT - 144) / 2, 160, 144, Graphics.spriteDefault);
+        Graphics.draw(Graphics.titlescreen, (Graphics.WIDTH - Graphics._WIDTH) / 2, 0, Graphics._WIDTH, Graphics.HEIGHT, Graphics.spriteDefault);
     }
 
     public override void run()

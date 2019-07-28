@@ -180,6 +180,7 @@ public abstract class Entity
                 //get the coins
                 if (c == 4) Core.money += 100;
                 else Core.money += 500;
+                Sound.money.Play();
                 p.coins.Add(new Coord(tilex, tiley));
                 Core.addException(new Coord(tilex, tiley), 0, float.MaxValue);
             }
@@ -297,12 +298,14 @@ public abstract class Entity
         {
             grounded = false;
             vy -= WorldState.PLAYER_JUMP_SPEED;
+            Sound.trampoline.Play();
         }
         if(dead&&this is Player&&Core.deadTime<=0)
         {
             Core.money -= 100;
             Core.deadTime = 1.5F;
             (this as Player).unlockCamera(x, y);
+            Sound.die.Play();
         }
     }
 }

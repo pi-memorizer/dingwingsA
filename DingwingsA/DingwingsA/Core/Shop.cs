@@ -48,7 +48,7 @@ class ShopState : GameState
     static int itemIndex = 0, topItem = 0;
     static bool leftSide = true;
 
-    static IEnumerator<Item> unlockables = getUnlockables();
+    public static IEnumerator<Item[]> unlockables = getUnlockables();
     static ShopState()
     {
         categories.Add("Graphics");
@@ -64,7 +64,7 @@ class ShopState : GameState
         categories.Add("Sound");
         List<Item> soundItems = new List<Item>();
         addItem(soundItems, new Item("Sound", "music1", ""));
-        addItem(soundItems, new Item("Better Sound", "music2", "", "sound1"));
+        addItem(soundItems, new Item("Better Sound", "music2", "", "music1"));
         items.Add(soundItems);
 
         categories.Add("Abilities");
@@ -78,13 +78,8 @@ class ShopState : GameState
         categories.Add("Misc");
         List<Item> miscItems = new List<Item>();
         addItem(miscItems, new Item("No Ads", "ads", ""));
+        addItem(miscItems, new Item("Win Game", "win", ""));
         items.Add(miscItems);
-
-
-        foreach (var item in allItems.Values)
-        {
-            item.unlocked = true;
-        }
     }
 
     static void addItem(List<Item> list, Item item)
@@ -98,9 +93,18 @@ class ShopState : GameState
 
     }
 
-    public static IEnumerator<Item> getUnlockables()
+    public static IEnumerator<Item[]> getUnlockables()
     {
-        yield return null;
+        yield return new Item[] { allItems["left"], allItems["right"] };
+        yield return new Item[] { allItems["red"], allItems["green"], allItems["blue"] };
+        yield return new Item[] { allItems["graphics1"], allItems["music1"] };
+        yield return new Item[] { allItems["jump"], allItems["dash"] };
+        yield return new Item[] { allItems["background"] };
+        yield return new Item[] { allItems["ads"] };
+        yield return new Item[] { allItems["music2"] };
+        yield return new Item[] { allItems["graphics2"] };
+        yield return new Item[] { allItems["win"] };
+        while (true) yield return null;
     }
 
     public override void draw()
@@ -112,21 +116,22 @@ class ShopState : GameState
             Graphics.drawString(categories[i], categoryIndex == i ? 10 : 0, 60 * (i - topCategory));
         }*/
         Graphics.draw(Graphics.shop, dx, 0, Graphics.WIDTH, Graphics.HEIGHT,Graphics.spriteDefault);
+        if(leftSide) Graphics.draw(Graphics.shopCarrot, dx + 124, 75 + (153 - 75) * categoryIndex, Graphics.shopCarrot.Width, Graphics.shopCarrot.Height, Graphics.spriteDefault);
         for (int i = topItem; i < topItem + 3&&i<items[categoryIndex].Count; i++)
         {
             Item item = items[categoryIndex][i];
             int top = 150 * (i - topItem)+48;
-            int left = 200;
+            int left = 150;
             int width = 492;
             int height = 140;
-            Graphics.drawRect(Color.White, left+dx, top, width, height);
+            Graphics.draw((item.unlocked&&!item.bought && (item.prereq == "" || Core.getFlag(item.prereq)) ? Graphics.buttonActive:Graphics.buttonDisabled), left+dx, top, width, height, Graphics.spriteDefault);
             
             Graphics.drawString(item.name, left+dx, top);
             for(int j = 0; j < item.description.Count; j++)
             {
                 Graphics.drawString(item.description[j], left+dx, top + 20+j*(Graphics.CHAR_SIZE+2));
             }
-            if(!leftSide&&i==itemIndex) Graphics.draw(Graphics.buttonHighlight, left, top, 122, 47,Graphics.spriteDefault);
+            if(!leftSide&&i==itemIndex) Graphics.draw(Graphics.buttonHighlight, left+width-Graphics.buttonHighlight.Width-5+dx, top+height-Graphics.buttonHighlight.Height-4, 122, 47,Graphics.spriteDefault);
         }
     }
 

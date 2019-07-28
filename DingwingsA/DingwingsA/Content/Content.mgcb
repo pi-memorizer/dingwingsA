@@ -133,6 +133,30 @@
 /processorParam:TextureFormat=Color
 /build:images/dr hate him.png
 
+#begin images/medbill.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/medbill.png
+
+#begin images/new-item.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/new-item.png
+
 #begin images/shop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -144,6 +168,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/shop.png
+
+#begin images/shop-carrot.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/shop-carrot.png
 
 #begin images/single-slimes.png
 /importer:TextureImporter
@@ -229,6 +265,18 @@
 /processorParam:TextureFormat=Color
 /build:images/tileset1-tiny.png
 
+#begin images/titlescreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/titlescreen.png
+
 #begin maps/test.json
 /copy:maps/test.json
 
@@ -247,6 +295,42 @@
 #begin music/whatTheAbsoluteCrapDidIJustListenTo.wav
 /copy:music/whatTheAbsoluteCrapDidIJustListenTo.wav
 
+#begin SFX/Clap.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Clap.wav
+
+#begin SFX/Die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Die.wav
+
+#begin SFX/MenuSFX.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/MenuSFX.wav
+
+#begin SFX/Money.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Money.wav
+
+#begin SFX/Success.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Success.wav
+
+#begin SFX/Trampoline.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Trampoline.wav
+
 #begin shaders/solidShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -258,10 +342,4 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:shaders/spriteDefault.fx
-
-#begin maps/left.json
-/copy:maps/left.json
-
-#begin maps/right.json
-/copy:maps/right.json
 

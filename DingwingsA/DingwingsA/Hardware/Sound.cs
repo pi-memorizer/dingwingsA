@@ -21,6 +21,8 @@ namespace Hardware
         public static string baseSong = "Content/music/Bongo";
         public static string shopSong = "Content/music/shop.wav";
 
+        public static SoundEffect clap, menu, die, money, success, trampoline;
+
         static WaveOutEvent songInstance = new WaveOutEvent();
         static string currentTheme = "";
         static LoopStream loopStream;
@@ -45,6 +47,12 @@ namespace Hardware
         //TODO figure out way to make a song give up loading to start a new thing
         public static void loadContent(ContentManager content)
         {
+            clap = content.Load<SoundEffect>("SFX/clap");
+            die = content.Load<SoundEffect>("SFX/die");
+            menu = content.Load<SoundEffect>("SFX/MenuSFX");
+            money = content.Load<SoundEffect>("SFX/money");
+            success = content.Load<SoundEffect>("SFX/success");
+            trampoline = content.Load<SoundEffect>("SFX/trampoline");
         }
         
         public static void unloadContent()
