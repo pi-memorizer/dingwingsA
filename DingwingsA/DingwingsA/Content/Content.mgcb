@@ -301,11 +301,29 @@
 /processorParam:Quality=Best
 /build:SFX/Clap.wav
 
+#begin SFX/Dash.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Dash.wav
+
+#begin SFX/DashPad.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/DashPad.wav
+
 #begin SFX/Die.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/Die.wav
+
+#begin SFX/Jump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Jump.wav
 
 #begin SFX/MenuSFX.wav
 /importer:WavImporter
@@ -330,6 +348,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:SFX/Trampoline.wav
+
+#begin SFX/Victory.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/Victory.wav
 
 #begin shaders/solidShader.fx
 /importer:EffectImporter

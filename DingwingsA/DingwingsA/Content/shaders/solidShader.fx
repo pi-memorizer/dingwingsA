@@ -14,11 +14,13 @@ float4 Filter;
 struct VertexShaderInput
 {
 	float4 Position : POSITION0;
+	float4 Color : COLOR;
 };
 
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
+	float4 Color : COLOR;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -26,13 +28,14 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	VertexShaderOutput output = (VertexShaderOutput)0;
 
 	output.Position = mul(input.Position, WorldViewProjection);
+	output.Color = input.Color;
 
 	return output;
 }
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	return Color*Filter;
+	return Color*Filter*input.Color;
 }
 
 technique BasicColorDrawing

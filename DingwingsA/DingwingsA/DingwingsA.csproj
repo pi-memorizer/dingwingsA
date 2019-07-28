@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\Coord.cs" />
+    <Compile Include="Core\EndState.cs" />
     <Compile Include="Core\Game.cs" />
     <Compile Include="Core\HealthcareState.cs" />
     <Compile Include="Core\Interfaces.cs" />

@@ -4,6 +4,7 @@ using System.IO;
 using unit = System.Single;
 using System;
 using Hardware;
+using Microsoft.Xna.Framework;
 
 public abstract class GameState
 {
@@ -167,9 +168,10 @@ public abstract class Entity
             jump = true;
             Core.addException(new Coord(tilex, tiley), 52, .25F);
         }
-        if (c == 3 && grounded && vx != 0 && Core.rectCollides(tilex * Core.TILE_SIZE + 4, tiley * Core.TILE_SIZE + 8, Core.TILE_SIZE - 8, Core.TILE_SIZE - 8, x, y, width, height))
+        if (c == 3 && grounded && vx != 0 && dashing<=0&& Core.rectCollides(tilex * Core.TILE_SIZE + 4, tiley * Core.TILE_SIZE + 8, Core.TILE_SIZE - 8, Core.TILE_SIZE - 8, x, y, width, height))
         {
             dashing = .5F;
+            Sound.dashPad.Play();
             vdash = Mathf.Sign(vx) * 3 * WorldState.PLAYER_MOVE_SPEED;
         }
         if(c==4||c==5)
@@ -193,30 +195,35 @@ public abstract class Entity
         if(c==7)
         {
             dead = true;
+            if(alive) (this as Player).deathBySpikes = false;
         }
         if(c==8&&Core.rectCollides(x,y,width,height,tilex*Core.TILE_SIZE+1,tiley*Core.TILE_SIZE+16,Core.TILE_SIZE-2,16))
         {
             dead = true;
             Core.addException(new Coord(tilex, tiley), -16, 60F);
             alive = false;
+            (this as Player).deathBySpikes = true;
         }
         if (c == 9 && Core.rectCollides(x, y, width, height, tilex * Core.TILE_SIZE, tiley * Core.TILE_SIZE+1, 16, Core.TILE_SIZE-2))
         {
             dead = true;
             Core.addException(new Coord(tilex, tiley), -16, 60F);
             alive = false;
+            (this as Player).deathBySpikes = true;
         }
         if (c == 10 && Core.rectCollides(x, y, width, height, tilex * Core.TILE_SIZE+16, tiley * Core.TILE_SIZE+1, 16, Core.TILE_SIZE-2))
         {
             dead = true;
             Core.addException(new Coord(tilex, tiley), -16, 60F);
             alive = false;
+            (this as Player).deathBySpikes = true;
         }
         if (c == 11 && Core.rectCollides(x, y, width, height, tilex * Core.TILE_SIZE+1, tiley * Core.TILE_SIZE, Core.TILE_SIZE-2, 16))
         {
             dead = true;
             Core.addException(new Coord(tilex, tiley), -16, 60F);
             alive = false;
+            (this as Player).deathBySpikes = true;
         }
 
         return false;
@@ -306,6 +313,12 @@ public abstract class Entity
             Core.deadTime = 1.5F;
             (this as Player).unlockCamera(x, y);
             Sound.die.Play();
+            for(int i = 0; i < 100; i++)
+            {
+                float angle = (float)(Core.rand.NextDouble()) * 3.1415F * 2;
+                float magnitude = (float)(Core.rand.NextDouble()) * 100;
+                Graphics.particles.Add(new Particle(new Color(119,255,178), x, y, vx+magnitude*Mathf.Cos(angle), vy+magnitude*Mathf.Sin(angle)));
+            }
         }
     }
 }

@@ -39,6 +39,8 @@ namespace Hardware
         public static Texture2D shop, newItem;
         public static Texture2D buttonHighlight, buttonDisabled, buttonActive;
         public static Texture2D titlescreen, shopCarrot, medbill;
+        public static List<Particle> particles = new List<Particle>();
+        
 
         public static void init()
         {
@@ -285,6 +287,17 @@ namespace Hardware
             lockedMaterial = true;
         }
 
+        public static void lockMaterial(Color c)
+        {
+            Effect effect = solidColor;
+            effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
+            effect.Parameters["Color"].SetValue(Color.White.ToVector4());
+            effect.Parameters["Filter"].SetValue(Color.White.ToVector4());
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            effect.CurrentTechnique.Passes[0].Apply();
+            lockedMaterial = true;
+        }
+
         public static void lockTextMaterial(Color color)
         {
             Effect effect = spriteDefault;
@@ -471,6 +484,14 @@ namespace Hardware
             verts[currentVertex + 4].Position = new Vector3(x + width, y + height, l);
             verts[currentVertex + 5] = verts[currentVertex];
 
+            verts[currentVertex].Color = Color.White;
+            verts[currentVertex + 1].Color = Color.White;
+            verts[currentVertex + 2].Color = Color.White;
+
+            verts[currentVertex + 3] = verts[currentVertex + 2];
+            verts[currentVertex + 4].Color = Color.White;
+            verts[currentVertex + 5] = verts[currentVertex];
+
             if (!lockedMaterial)
             {
                 graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
@@ -481,7 +502,55 @@ namespace Hardware
                 currentVertex += 6;
             }
         }
-        
+
+        public static void drawParticle(Color c, float x, float y, int width, int height)
+        {
+            Effect effect = solidColor;
+            if (!lockedMaterial)
+            {
+                effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
+                effect.Parameters["Color"].SetValue(Color.White.ToVector4());
+                graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+                effect.CurrentTechnique.Passes[0].Apply();
+            }
+            else if (currentVertex + 6 >= verts.Length)
+            {
+                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, currentVertex / 3);
+                currentVertex = 0;
+            }
+
+            x = Mathf.FloorToInt(x);
+            y = Mathf.FloorToInt(y);
+
+            //For stuff like drawIntro needing to be called from draw() instead of gui()
+            float l = 2 * HEIGHT - .01F;
+            verts[currentVertex].Position = new Vector3(x, y + height, l);
+            verts[currentVertex + 1].Position = new Vector3(x, y, l);
+            verts[currentVertex + 2].Position = new Vector3(x + width, y, l);
+
+            verts[currentVertex + 3] = verts[currentVertex + 2];
+            verts[currentVertex + 4].Position = new Vector3(x + width, y + height, l);
+            verts[currentVertex + 5] = verts[currentVertex];
+
+            verts[currentVertex].Color = c;
+            verts[currentVertex + 1].Color = c;
+            verts[currentVertex + 2].Color = c;
+
+            verts[currentVertex + 3] = verts[currentVertex + 2];
+            verts[currentVertex + 4].Color = c;
+            verts[currentVertex + 5] = verts[currentVertex];
+
+            if (!lockedMaterial)
+            {
+                graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verts, 0, 2);
+                currentVertex = 0;
+            }
+            else
+            {
+                currentVertex += 6;
+            }
+        }
+
         public static void drawCharacter(char c, float x, float y, int scale = 1)
         {
             if (c < 256)
@@ -568,4 +637,20 @@ namespace Hardware
             throw new NotImplementedException();
         }
     }
+
+    class Particle
+    {
+        public float x, y, vx, vy;
+        public Color color;
+
+        public Particle(Color color, float x, float y, float vx, float vy)
+        {
+            this.color = color;
+            this.x = x;
+            this.y = y;
+            this.vx = vx;
+            this.vy = vy;
+        }
+    }
+
 }

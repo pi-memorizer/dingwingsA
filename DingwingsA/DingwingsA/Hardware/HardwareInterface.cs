@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -77,7 +78,7 @@ namespace Hardware
                 Exit();
             if(keyboardState.IsKeyDown(Keys.F5)&&!_f5)
             {
-                core = new Core();
+                f5();
                 //do other refreshing stuff here
             }
             if(keyboardState.IsKeyDown(Keys.F11)&&!_f11)
@@ -102,6 +103,28 @@ namespace Hardware
             time = gameTime;
             core.run();
             base.Update(gameTime);
+        }
+
+        public static void f5()
+        {
+            core = new Core();
+            Core.animationMoney = 0;
+            for (int i = 0; i < 3; i++) Core.adStates[i] = 0;
+            Core.deadTime = 0;
+            Core.exceptions.Clear();
+            Core.money = 0;
+            Core.newItemTime = 0;
+            Core.p = new Player();
+            Core.flags.Clear();
+
+            ShopState.categories = new List<string>();
+            ShopState.categoryIndex = ShopState.topCategory = 0;
+            ShopState.items = new List<List<ShopState.Item>>();
+            ShopState.allItems = new Dictionary<string, ShopState.Item>();
+            ShopState.itemIndex = ShopState.topItem = 0;
+            ShopState.leftSide = true;
+
+            Sound.setMusic(Sound.baseSong);
         }
 
         /// <summary>

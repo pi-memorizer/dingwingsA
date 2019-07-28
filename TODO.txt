@@ -1,15 +1,6 @@
-things you can buy
-	ads
-	music
-	sounds
-shop
-	unlocking system
-fix various special tiles
-middle room
-ads
-
-
+directional boosts
+end screen?
+better money
 
 particle affects
 	money
-	died on spikes

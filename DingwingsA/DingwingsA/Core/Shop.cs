@@ -14,7 +14,7 @@ class ShopState : GameState
         public List<string> description = new List<string>();
         const int MAX_LENGTH = 20;
         public bool bought, unlocked;
-        public int price = 100;
+        public int price = 1000;
         public string prereq;
 
         public Item(string name, string flag, string description, string prereq = "")
@@ -41,12 +41,13 @@ class ShopState : GameState
             if (line != "") this.description.Add(line);
         }
     }
-    static List<string> categories = new List<string>();
-    static int categoryIndex = 0, topCategory = 0;
-    static List<List<Item>> items = new List<List<Item>>();
-    static Dictionary<string, Item> allItems = new Dictionary<string, Item>();
-    static int itemIndex = 0, topItem = 0;
-    static bool leftSide = true;
+    public static List<string> categories = new List<string>();
+    public static int categoryIndex = 0, topCategory = 0;
+    public static List<List<Item>> items = new List<List<Item>>();
+    public static Dictionary<string, Item> allItems = new Dictionary<string, Item>();
+    public static int itemIndex = 0, topItem = 0;
+    public static bool leftSide = true;
+    public bool purchase;
 
     public static IEnumerator<Item[]> unlockables = getUnlockables();
     static ShopState()
@@ -64,7 +65,7 @@ class ShopState : GameState
         categories.Add("Sound");
         List<Item> soundItems = new List<Item>();
         addItem(soundItems, new Item("Sound", "music1", "Tired of eternal bongos? Get the latest sick beats to soothe your frazzled soul!"));
-        addItem(soundItems, new Item("Better Sound", "music2", "For the consumers in need of a true melody.", "sound1"));
+        addItem(soundItems, new Item("Better Sound", "music2", "For the consumers in need of a true melody.", "music1"));
         items.Add(soundItems);
 
         categories.Add("Abilities");
@@ -133,6 +134,7 @@ class ShopState : GameState
             }
             if(!leftSide&&i==itemIndex) Graphics.draw(Graphics.buttonHighlight, left+width-Graphics.buttonHighlight.Width-5+dx, top+height-Graphics.buttonHighlight.Height-4, 122, 47,Graphics.spriteDefault);
         }
+        WorldState.drawMoney(false);
     }
 
     public override void run()
@@ -144,10 +146,12 @@ class ShopState : GameState
             {
                 if (categoryIndex != 0) categoryIndex--;
                 if (categoryIndex < topCategory) topCategory--;
+                Sound.menu.Play();
             } else if(getDown()&&!down)
             {
                 if (categoryIndex != categories.Count - 1) categoryIndex++;
                 if (categoryIndex >= topCategory + 5) topCategory++;
+                Sound.menu.Play();
             }
             if (itemIndex >= items[categoryIndex].Count)
             {
@@ -157,6 +161,7 @@ class ShopState : GameState
             if(getRight()&&!right)
             {
                 leftSide = false;
+                Sound.menu.Play();
             }
         } else
         {
@@ -164,15 +169,18 @@ class ShopState : GameState
             {
                 if (itemIndex != 0) itemIndex--;
                 if (itemIndex < topItem) topItem--;
+                Sound.menu.Play();
             }
             else if (getDown() && !down)
             {
                 if (itemIndex != items[categoryIndex].Count - 1) itemIndex++;
                 if (itemIndex >= topItem + 2) topItem++;
+                Sound.menu.Play();
             }
             if(getLeft()&&!left)
             {
                 leftSide = true;
+                Sound.menu.Play();
             }
             if(getA()&&!a)
             {
@@ -182,12 +190,33 @@ class ShopState : GameState
                     item.bought = true;
                     Core.money -= item.price;
                     Core.setFlag(item.flag);
+                    purchase = true;
                 }
             }
         }
         if(getB()&&!b)
         {
             Core.instance.stateStack.Remove(this);
+            if(Core.getFlag("win"))
+            {
+                Core.instance.stateStack.Add(new EndState());
+                Sound.victory.Play();
+            } else if(purchase)
+            {
+                Sound.clap.Play();
+                for(int i = 0; i < 200; i++)
+                {
+                    float x = (float)(Core.rand.NextDouble()) * Graphics.WIDTH;
+                    float vx = ((float)(Core.rand.NextDouble())*2-1) * 100;
+                    float angle = (float)(Core.rand.NextDouble()) * 3.1415F * 2;
+                    float magnitude = (float)(Core.rand.NextDouble()) * 100;
+                    Color color = Color.Yellow;
+                    int r = Core.rand.Next(3);
+                    if (r == 1) color = Color.Magenta;
+                    if (r == 2) color = Color.Cyan;
+                    Graphics.particles.Add(new Particle(color, x+Core.p.x-Graphics.WIDTH/2, Core.p.y-Graphics.HEIGHT/2, vx+magnitude*Mathf.Cos(angle), magnitude*Mathf.Sin(angle)));
+                }
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ public class Player : Entity
     public bool test2 = false;
     public int world = 0;
     public HashSet<Coord> coins = new HashSet<Coord>();
+    public bool deathBySpikes = false;
     public Player()
     {
         x = 0;
@@ -35,7 +36,7 @@ public class Player : Entity
         if (Core.getFlag("dash") && Core.getFlag("jump")) index += 3;
         else if (Core.getFlag("dash")) index += 1;
         else if (Core.getFlag("jump")) index += 2;
-        if (grounded && Mathf.FloorToInt(x / 32) % 2 == 0||(Core.getFlag("jump")&&!grounded))
+        if ((grounded && Mathf.FloorToInt(x / 32) % 2 == 0&&vx!=0)||(Core.getFlag("jump")&&!grounded))
         {
             //index += (((int)HardwareInterface.timeSinceLevelLoad) % 2) * 4;
             index += 4;
