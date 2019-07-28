@@ -22,6 +22,7 @@ namespace Hardware
         public static string shopSong = "Content/music/shop.wav";
 
         public static SoundEffect clap, menu, die, money, success, trampoline, dash, dashPad, jump, victory, owenWilson;
+        public static SoundEffect startVoiceover, middleVoiceover, endVoiceover;
 
         static WaveOutEvent songInstance = new WaveOutEvent();
         static string currentTheme = "";
@@ -58,6 +59,9 @@ namespace Hardware
             jump = content.Load<SoundEffect>("SFX/jump");
             victory = content.Load<SoundEffect>("SFX/victory");
             owenWilson = content.Load<SoundEffect>("SFX/OwenWilson");
+            startVoiceover = content.Load<SoundEffect>("voiceover/introVoiceover");
+            middleVoiceover = content.Load<SoundEffect>("voiceover/middleVoiceover");
+            endVoiceover = content.Load<SoundEffect>("voiceover/endVoiceover");
         }
         
         public static void unloadContent()

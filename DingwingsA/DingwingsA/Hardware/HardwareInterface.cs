@@ -113,7 +113,7 @@ namespace Hardware
             Core.deadTime = 0;
             Core.exceptions.Clear();
             Core.money = 0;
-            Core.newItemTime = 0;
+            Core.newItemTime = 5;
             Core.p = new Player();
             Core.flags.Clear();
 

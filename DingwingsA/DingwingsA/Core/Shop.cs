@@ -98,7 +98,6 @@ class ShopState : GameState
 
     public static IEnumerator<Item[]> getUnlockables()
     {
-        yield return new Item[] { allItems["left"], allItems["right"] };
         yield return new Item[] { allItems["red"], allItems["green"], allItems["blue"] };
         yield return new Item[] { allItems["graphics1"], allItems["music1"] };
         yield return new Item[] { allItems["jump"] };
