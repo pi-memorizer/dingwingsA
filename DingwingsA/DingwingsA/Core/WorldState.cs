@@ -31,6 +31,7 @@ class WorldState : GameState
                 if (valid)
                 {
                     newItemTime = 0;
+                    Sound.owenWilson.Play();
                 }
             }
         }
@@ -75,12 +76,12 @@ class WorldState : GameState
             {
                 Core.instance.stateStack.Add(new ShopState());
             }
-            if(p.x>100000&&!Core.getFlag("success1"))
+            if(p.x>85*32&&!Core.getFlag("success1"))
             {
                 Core.setFlag("success1");
                 Sound.success.Play();
             }
-            if (p.x < -100000 && !Core.getFlag("success2"))
+            if (p.x < -75*32 && !Core.getFlag("success2"))
             {
                 Core.setFlag("success2");
                 Sound.success.Play();
@@ -131,7 +132,13 @@ class WorldState : GameState
         Graphics.lockMaterial(Color.White);
         foreach(var particle in Graphics.particles)
         {
-            Graphics.drawParticle(particle.color, Core.getOnscreenX(particle.x), Core.getOnscreenY(particle.y), (int)Graphics.scale, (int)Graphics.scale);
+            if(!particle.isMoney)Graphics.drawParticle(particle.color, Core.getOnscreenX(particle.x), Core.getOnscreenY(particle.y), (int)Graphics.scale, (int)Graphics.scale);
+        }
+        Graphics.unlockMaterial();
+        Graphics.lockMaterial(Graphics.bitmapFont,Color.Red);
+        foreach (var particle in Graphics.particles)
+        {
+            if (particle.isMoney) Graphics.draw(Graphics.charSprites['$'], Core.getOnscreenX(particle.x), Core.getOnscreenY(particle.y), (int)Graphics.scale*8, (int)Graphics.scale*8);
         }
         Graphics.unlockMaterial();
         drawMoney(true);

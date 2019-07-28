@@ -118,11 +118,13 @@ namespace Hardware
             Core.flags.Clear();
 
             ShopState.categories = new List<string>();
-            ShopState.categoryIndex = ShopState.topCategory = 0;
+            ShopState.categoryIndex = 2;
+            ShopState.topCategory = 0;
             ShopState.items = new List<List<ShopState.Item>>();
             ShopState.allItems = new Dictionary<string, ShopState.Item>();
             ShopState.itemIndex = ShopState.topItem = 0;
             ShopState.leftSide = true;
+            ShopState.thingsBought = 0;
 
             Sound.setMusic(Sound.baseSong);
         }

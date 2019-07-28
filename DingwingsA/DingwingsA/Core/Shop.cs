@@ -42,11 +42,12 @@ class ShopState : GameState
         }
     }
     public static List<string> categories = new List<string>();
-    public static int categoryIndex = 0, topCategory = 0;
+    public static int categoryIndex = 2, topCategory = 0;
     public static List<List<Item>> items = new List<List<Item>>();
     public static Dictionary<string, Item> allItems = new Dictionary<string, Item>();
     public static int itemIndex = 0, topItem = 0;
     public static bool leftSide = true;
+    public static int thingsBought = 0;
     public bool purchase;
 
     public static IEnumerator<Item[]> unlockables = getUnlockables();
@@ -79,6 +80,7 @@ class ShopState : GameState
         categories.Add("Misc");
         List<Item> miscItems = new List<Item>();
         addItem(miscItems, new Item("No Ads", "ads", "Remove those pesky ads cluttering up your life!"));
+        addItem(miscItems, new Item("Premium Ads", "premium", "", "ads"));
         addItem(miscItems, new Item("Win Game", "win", ""));
         items.Add(miscItems);
     }
@@ -99,11 +101,13 @@ class ShopState : GameState
         yield return new Item[] { allItems["left"], allItems["right"] };
         yield return new Item[] { allItems["red"], allItems["green"], allItems["blue"] };
         yield return new Item[] { allItems["graphics1"], allItems["music1"] };
-        yield return new Item[] { allItems["jump"], allItems["dash"] };
+        yield return new Item[] { allItems["jump"] };
+        yield return new Item[] { allItems["dash"] };
         yield return new Item[] { allItems["background"] };
         yield return new Item[] { allItems["ads"] };
         yield return new Item[] { allItems["music2"] };
         yield return new Item[] { allItems["graphics2"] };
+        yield return new Item[] { allItems["premium"] };
         yield return new Item[] { allItems["win"] };
         while (true) yield return null;
     }
@@ -130,9 +134,9 @@ class ShopState : GameState
             Graphics.drawString(item.name, left+dx, top);
             for(int j = 0; j < item.description.Count; j++)
             {
-                Graphics.drawString(item.description[j], left+dx, top + 20+j*(Graphics.CHAR_SIZE+2));
+                Graphics.drawString(item.description[j], left+dx+10, top + 20+j*(Graphics.CHAR_SIZE+2));
             }
-            if(!leftSide&&i==itemIndex) Graphics.draw(Graphics.buttonHighlight, left+width-Graphics.buttonHighlight.Width-5+dx, top+height-Graphics.buttonHighlight.Height-4, 122, 47,Graphics.spriteDefault);
+            if(!leftSide&&i==itemIndex) Graphics.draw(Graphics.buttonHighlight, left+width-Graphics.buttonHighlight.Width-5+2+dx, top+height-Graphics.buttonHighlight.Height-4+3, 122, 47,Graphics.spriteDefault);
         }
         WorldState.drawMoney(false);
     }
@@ -191,6 +195,7 @@ class ShopState : GameState
                     Core.money -= item.price;
                     Core.setFlag(item.flag);
                     purchase = true;
+                    thingsBought++;
                 }
             }
         }

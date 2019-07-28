@@ -1,6 +1,2 @@
-directional boosts
 end screen?
-better money
-
-particle affects
-	money
+$ particles

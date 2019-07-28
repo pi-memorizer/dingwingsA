@@ -21,7 +21,7 @@ namespace Hardware
         public static string baseSong = "Content/music/Bongo";
         public static string shopSong = "Content/music/shop.wav";
 
-        public static SoundEffect clap, menu, die, money, success, trampoline, dash, dashPad, jump, victory;
+        public static SoundEffect clap, menu, die, money, success, trampoline, dash, dashPad, jump, victory, owenWilson;
 
         static WaveOutEvent songInstance = new WaveOutEvent();
         static string currentTheme = "";
@@ -57,6 +57,7 @@ namespace Hardware
             dashPad = content.Load<SoundEffect>("SFX/dashPad");
             jump = content.Load<SoundEffect>("SFX/jump");
             victory = content.Load<SoundEffect>("SFX/victory");
+            owenWilson = content.Load<SoundEffect>("SFX/OwenWilson");
         }
         
         public static void unloadContent()
@@ -115,6 +116,11 @@ namespace Hardware
             }
 
             songInstance.Play();
+        }
+
+        public static void stopMusic()
+        {
+            songInstance.Stop();
         }
     }
 

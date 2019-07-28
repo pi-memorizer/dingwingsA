@@ -27,6 +27,7 @@ public partial class Core {
     public static float newItemTime = 0;
 
     public static float[] adStates = new float[3];
+    public static int[] adStages = new int[3];
 
     public Core()
     {
@@ -37,8 +38,9 @@ public partial class Core {
 
         stateStack.Add(new WorldState());
         //stateStack.Add(new ShopState());
-        stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
+        //stateStack.Add(new Textbox("Yo this is a test will it work? will it not? will it not? will it not? this is a stupid rap yo"));
         stateStack.Add(new TitleScreen());
+        //stateStack.Add(new EndState());
     }
 
     public void testWorldInit(World w)
@@ -158,19 +160,19 @@ public partial class Core {
         if(money<animationMoney)
         {
             int _a = (int)animationMoney;
-            animationMoney -= HardwareInterface.deltaTime*100;
-            if((int)animationMoney!=_a)
+            animationMoney -= HardwareInterface.deltaTime*300;
+            if((int)animationMoney/20!=_a/20)
             {
                 float x = Graphics.WIDTH-(float)(rand.NextDouble()) * (animationMoney.ToString().Length) * Graphics.CHAR_SIZE - 10;
                 float angle = (float)(Core.rand.NextDouble()) * 3.1415F * 2;
                 float magnitude = (float)(Core.rand.NextDouble()) * 100;
-                Graphics.particles.Add(new Particle(Color.Red, x+p.getCameraX()+p.width/2-Graphics.WIDTH/2, 16 + Graphics.CHAR_SIZE / 2+p.getCameraY()+p.height/2-Graphics.HEIGHT/2, magnitude * Mathf.Cos(angle), magnitude * Mathf.Sin(angle)));
+                Graphics.particles.Add(new Particle(Color.Red, x+p.getCameraX()+p.width/2-Graphics.WIDTH/2, 16 + Graphics.CHAR_SIZE / 2+p.getCameraY()+p.height/2-Graphics.HEIGHT/2, magnitude * Mathf.Cos(angle), magnitude * Mathf.Sin(angle),true));
             }
             if (money > animationMoney) animationMoney = money;
         }
         if(money>animationMoney)
         {
-            animationMoney += HardwareInterface.deltaTime*100;
+            animationMoney += HardwareInterface.deltaTime*300;
             if (money < animationMoney) animationMoney = money;
         }
 
@@ -193,7 +195,7 @@ public partial class Core {
         {
             GameState.startMenu();
             GameState top = stateStack[stateStack.Count - 1];
-            if (!(top is ShopState || getFlag("ads")))
+            if (!(top is ShopState || (getFlag("ads")&&!getFlag("premium"))))
             {
                 for(int i = 0; i < 3; i++)
                 {
@@ -205,6 +207,7 @@ public partial class Core {
                         if(HardwareInterface.deltaTime>rand.NextDouble()*(top is TitleScreen?10:50))
                         {
                             adStates[i] = 5;
+                            adStages[i] = rand.Next(2);
                         }
                     }
                 }
@@ -225,22 +228,29 @@ public partial class Core {
     public void draw()
     {
         if (stateStack.Count > 0) stateStack[stateStack.Count-1].draw();
-        if (!(stateStack[stateStack.Count - 1] is ShopState || getFlag("ads")))
+        if (!(stateStack[stateStack.Count - 1] is ShopState || (getFlag("ads")&&!getFlag("premium"))))
         {
             if(adStates[0]>0)
             {
-                Graphics.draw(Graphics.ads[0], 16, 16, Graphics.ads[0].Width,Graphics.ads[0].Height,Graphics.spriteDefault);
+                Graphics.draw(Graphics.ads[0+4*adStages[0]], 16, 16, Graphics.ads[0].Width,Graphics.ads[0].Height,Graphics.spriteDefault);
             }
             if (adStates[1] > 0&&!(stateStack[stateStack.Count-1] is Textbox))
             {
-                Graphics.draw(Graphics.ads[1], 16, Graphics.HEIGHT-Graphics.ads[1].Height-16, Graphics.ads[1].Width, Graphics.ads[1].Height, Graphics.spriteDefault);
+                Graphics.draw(Graphics.ads[1+4*adStages[1]], 16, Graphics.HEIGHT-Graphics.ads[1].Height-16, Graphics.ads[1].Width, Graphics.ads[1].Height, Graphics.spriteDefault);
             }
             if (adStates[2] > 0)
             {
-                if(Mathf.FloorToInt(HardwareInterface.timeSinceLevelLoad*2)%2==0)
-                    Graphics.draw(Graphics.ads[2], Graphics.WIDTH-Graphics.ads[2].Width-16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
-                else
-                    Graphics.drawRect(Color.Red, Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height);
+                if(adStages[2]==0)
+                {
+                    if (Mathf.FloorToInt(HardwareInterface.timeSinceLevelLoad * 2) % 2 == 0)
+                        Graphics.draw(Graphics.ads[2], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
+                    else
+                        Graphics.draw(Graphics.ads[3], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
+                } else
+                {
+                    Graphics.draw(Graphics.ads[2+4], Graphics.WIDTH - Graphics.ads[2].Width - 16, 16, Graphics.ads[2].Width, Graphics.ads[2].Height, Graphics.spriteDefault);
+                }
+                
             }
         }
     }
@@ -261,7 +271,7 @@ public class TitleScreen : GameState
     public override void run()
     {
         //Sound.setMusic(Sound.baseSong);
-        if((getA()&&!a))
+        if((getA()&&!a)||(getStart()&&!start))
         {
             Core.instance.stateStack.Remove(this);
             //Core.instance.stateStack.Push(new State());

@@ -35,7 +35,7 @@ namespace Hardware
         public static Texture2D[] slime32sheet;
         public static GameSprite[] slime32;
         public static Texture2D[] backgrounds = new Texture2D[3];
-        public static Texture2D[] ads = new Texture2D[3];
+        public static Texture2D[] ads = new Texture2D[7];
         public static Texture2D shop, newItem;
         public static Texture2D buttonHighlight, buttonDisabled, buttonActive;
         public static Texture2D titlescreen, shopCarrot, medbill;
@@ -75,6 +75,10 @@ namespace Hardware
             ads[0] = content.Load<Texture2D>("images/single-slimes");
             ads[1] = content.Load<Texture2D>("images/dr hate him");
             ads[2] = content.Load<Texture2D>("images/1000player");
+            ads[3] = content.Load<Texture2D>("images/1000player-blink");
+            ads[4] = content.Load<Texture2D>("images/click");
+            ads[5] = content.Load<Texture2D>("images/fire");
+            ads[6] = content.Load<Texture2D>("images/shopping");
             shop = content.Load<Texture2D>("images/shop");
             buttonActive = content.Load<Texture2D>("images/active-button");
             buttonDisabled = content.Load<Texture2D>("images/disabled-button");
@@ -282,6 +286,17 @@ namespace Hardware
             effect.Parameters["s0"].SetValue(t);
             effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
             effect.Parameters["Color"].SetValue(Color.White.ToVector4());
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            effect.CurrentTechnique.Passes[0].Apply();
+            lockedMaterial = true;
+        }
+
+        public static void lockMaterial(Texture2D t, Color c)
+        {
+            Effect effect = spriteDefault;
+            effect.Parameters["s0"].SetValue(t);
+            effect.Parameters["WorldViewProjection"].SetValue(cameraMatrix);
+            effect.Parameters["Color"].SetValue(c.ToVector4());
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
             effect.CurrentTechnique.Passes[0].Apply();
             lockedMaterial = true;
@@ -642,9 +657,11 @@ namespace Hardware
     {
         public float x, y, vx, vy;
         public Color color;
+        public bool isMoney;
 
-        public Particle(Color color, float x, float y, float vx, float vy)
+        public Particle(Color color, float x, float y, float vx, float vy, bool isMoney = false)
         {
+            this.isMoney = isMoney;
             this.color = color;
             this.x = x;
             this.y = y;

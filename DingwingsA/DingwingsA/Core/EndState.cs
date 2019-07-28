@@ -9,30 +9,37 @@ using Microsoft.Xna.Framework;
 class EndState : GameState
 {
     float animationMoney = 0;
+
+    public EndState()
+    {
+        Sound.stopMusic();
+        Core.setFlag("ads", true);
+        Core.setFlag("premium", false);
+    }
+
     public override void draw()
     {
         Graphics.clear(Color.White);
-
+        int width = 32 * (1 + Mathf.FloorToInt(animationMoney).ToString().Length);
+        Graphics.drawStringRight("$" + Mathf.FloorToInt(animationMoney), Graphics.WIDTH / 2 + width / 2, 100,2);
+        string s = "Things bought " + ShopState.thingsBought + "/15";
+        Graphics.drawStringRight(s, Graphics.WIDTH / 2 + (s.Length) * 16, 130,2);
+        s = "YOU WIN!";
+        Graphics.drawStringRight(s, Graphics.WIDTH / 2 + (s.Length) * 16, 50, 2);
+        s = "A Game By Studio Dingwing";
+        Graphics.drawString(s, 10, Graphics.HEIGHT - 10-16);
     }
 
     public override void run()
     {
         if (Core.money < animationMoney)
         {
-            int _a = (int)animationMoney;
-            animationMoney -= HardwareInterface.deltaTime * 100;
-            if ((int)animationMoney != _a)
-            {
-                float x = Graphics.WIDTH - (float)(Core.rand.NextDouble()) * (animationMoney.ToString().Length) * Graphics.CHAR_SIZE - 10;
-                float angle = (float)(Core.rand.NextDouble()) * 3.1415F * 2;
-                float magnitude = (float)(Core.rand.NextDouble()) * 100;
-                Graphics.particles.Add(new Particle(Color.Red, x + p.getCameraX() + p.width / 2 - Graphics.WIDTH / 2, 16 + Graphics.CHAR_SIZE / 2 + p.getCameraY() + p.height / 2 - Graphics.HEIGHT / 2, magnitude * Mathf.Cos(angle), magnitude * Mathf.Sin(angle)));
-            }
+            animationMoney -= HardwareInterface.deltaTime * 1000;
             if (Core.money > animationMoney) animationMoney = Core.money;
         }
         if (Core.money > animationMoney)
         {
-            animationMoney += HardwareInterface.deltaTime * 100;
+            animationMoney += HardwareInterface.deltaTime * 1000;
             if (Core.money < animationMoney) animationMoney = Core.money;
         }
         if (getA()&&!a)
